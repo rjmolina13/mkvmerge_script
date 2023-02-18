@@ -1,26 +1,93 @@
-<!-- : Begin batch script
 @echo off
 ::- Changelog:
 ::+ 4.5 - added custom episode
+::+ 5.0 - added ffprobe and mkvmerge checking
 
-:start
-set season=S01
-set ver=v4.5
-set mkvmerge="D:\Users\Ronanj\Apps\mkvtoolnix-64-bit-73.0.0\mkvmerge.exe"
-set ffprobe="D:\Users\Ronanj\Downloads\Compressed\downloader\ffprobe.exe"
-set lang=kor
-set drama=KDrama
-set type=drama
+if not exist "%~dp0mkvs-play.vbs" (
+  echo Dim oPlayer > "%~dp0mkvs-play.vbs"
+  echo Set oPlayer = CreateObject("WMPlayer.OCX"^) >> "%~dp0mkvs-play.vbs"
+  echo. >> "%~dp0mkvs-play.vbs"
+  echo ' Play audio >> "%~dp0mkvs-play.vbs"
+  echo oPlayer.URL = "C:\Windows\Media\Windows Notify Calendar.wav" >> "%~dp0mkvs-play.vbs"
+  echo oPlayer.controls.play >> "%~dp0mkvs-play.vbs"
+  echo While oPlayer.playState ^<^> 1 ' 1 = Stopped >> "%~dp0mkvs-play.vbs"
+  echo WScript.Sleep 100 >> "%~dp0mkvs-play.vbs"
+  echo Wend >> "%~dp0mkvs-play.vbs"
+  echo. >> "%~dp0mkvs-play.vbs"
+  echo ' Release the audio file >> "%~dp0mkvs-play.vbs"
+  echo oPlayer.close >> "%~dp0mkvs-play.vbs"
+)
+
+@REM pause
+@REM exit /b
+
+
+:init
+chcp 65001 >NUL
+set ver=v5.0
 set nhcolor=
 set Green=%nhcolor%[32m
 set White=%nhcolor%[37m
 set Cyan=%nhcolor%[36m
+
 set Magenta=%nhcolor%[35m
 set Red=%nhcolor%[31m
 set Yellow=%nhcolor%[33m
 set Lightgray=%nhcolor%[38m
 set Bold=%nhcolor%[1m
-chcp 65001 >NUL
+
+call :header
+
+set "mkvmerge="
+for /f "delims=" %%i in ('dir /s /b /a-d "mkvmerge*.exe" 2^>nul') do set "mkvmerge=%%i" & goto :mkvmbreak
+
+:mkvmbreak
+if "%mkvmerge%" == "" (
+  echo.
+  echo   ^>   %Red%Error^^! %White%File %Yellow%mkvmerge*.exe %White%not found!
+  echo       %Bold%Please download %Yellow%mkvmerge.exe.%White% and extract it to the same folder with this script.
+  echo       %Bold%Please press any key to continue..%White%
+  pause >nul
+  start "" explorer %~dp0
+  start https://mkvtoolnix.download/windows/releases/74.0.0/mkvtoolnix-64-bit-74.0.0.7z
+  timeout 5 >nul
+  exit /b
+) else (
+  rem mkvmerge found!
+)
+
+
+set "ffprobe="
+for /f "delims=" %%i in ('dir /s /b /a-d "ffprobe*.exe" 2^>nul') do set "ffprobe=%%i" & goto :ffbreak
+
+:ffbreak
+if "%ffprobe%" == "" (
+  echo.
+  echo   ^>   %Red%Error^^! %White%File %Yellow%ffprobe*.exe %White%not found!
+  echo       %Bold%Please download %Yellow%ffprobe.exe.%White% and extract it to the same folder with this script.
+  echo       %Bold%Please press any key to continue..%White%
+  pause >nul
+  start "" explorer %~dp0
+  start https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-essentials.7z
+  timeout 5 >nul
+  exit /b
+  pause >nul
+) else (
+  rem ffprobe found!
+)
+
+cls
+
+
+
+:start
+set season=S01
+set mkvmerge="%~dp0bin\mkvmerge.exe"
+set ffprobe="%~dp0bin\ffprobe.exe"
+set lang=kor
+set drama=KDrama
+set type=drama
+
 set /a count = 0
 :main
 ::=================================================================================
@@ -155,7 +222,7 @@ cd..
 echo.
 echo.
 REM call "%~dp0play.bat"
-cscript //nologo "%~f0?.wsf"
+cscript //nologo "%~dp0mkvs-play.vbs"
 echo ```````````````````````````````````````````````````````````````
 title mkvmerge Script %ver%   [mkv+ass / %drama%]   l    Done muxing^!
 echo Finished muxing!
@@ -389,18 +456,14 @@ if "%season%"=="B" (set season=S01 && cls && goto main)
 echo %White%'
 cls && goto main
 
------ Begin wsf script --->
-<job><script language="VBScript">
-  Dim oPlayer
-Set oPlayer = CreateObject("WMPlayer.OCX")
 
-' Play audio
-oPlayer.URL = "C:\Windows\Media\Windows Notify Calendar.wav"
-oPlayer.controls.play 
-While oPlayer.playState <> 1 ' 1 = Stopped
-  WScript.Sleep 100
-Wend
-
-' Release the audio file
-oPlayer.close
-</script></job>
+:header
+echo.
+echo.
+echo.
+echo.
+echo ╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍
+echo                       %Green%mkvmerge%White% %Lightgray%Script %Red%%ver%%White%
+echo                            %Cyan%@Rubyjane%White%
+echo ╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍  
+goto :eof
