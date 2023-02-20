@@ -1,21 +1,28 @@
-@echo off
-::- Changelog:
+%@echo off
+::- Changelog: (02/20/2023)
 ::+ 4.5 - added custom episode
 ::+ 5.0 - added ffprobe and mkvmerge checking
+::+ 5.1 - reimplemented vbs playback
+::+ 5.2 - added bin folder checking
 
-if not exist "%~dp0mkvs-play.vbs" (
-  echo Dim oPlayer > "%~dp0mkvs-play.vbs"
-  echo Set oPlayer = CreateObject("WMPlayer.OCX"^) >> "%~dp0mkvs-play.vbs"
-  echo. >> "%~dp0mkvs-play.vbs"
-  echo ' Play audio >> "%~dp0mkvs-play.vbs"
-  echo oPlayer.URL = "C:\Windows\Media\Windows Notify Calendar.wav" >> "%~dp0mkvs-play.vbs"
-  echo oPlayer.controls.play >> "%~dp0mkvs-play.vbs"
-  echo While oPlayer.playState ^<^> 1 ' 1 = Stopped >> "%~dp0mkvs-play.vbs"
-  echo WScript.Sleep 100 >> "%~dp0mkvs-play.vbs"
-  echo Wend >> "%~dp0mkvs-play.vbs"
-  echo. >> "%~dp0mkvs-play.vbs"
-  echo ' Release the audio file >> "%~dp0mkvs-play.vbs"
-  echo oPlayer.close >> "%~dp0mkvs-play.vbs"
+if not exist "%~dp0mkvmerge_script-play.vbs" (
+  echo Dim oPlayer > "%~dp0mkvmerge_script-play.vbs"
+  echo Set oPlayer = CreateObject("WMPlayer.OCX"^) >> "%~dp0mkvmerge_script-play.vbs"
+  echo. >> "%~dp0mkvmerge_script-play.vbs"
+  echo ' Play audio >> "%~dp0mkvmerge_script-play.vbs"
+  echo oPlayer.URL = "C:\Windows\Media\Windows Notify Calendar.wav" >> "%~dp0mkvmerge_script-play.vbs"
+  echo oPlayer.controls.play >> "%~dp0mkvmerge_script-play.vbs"
+  echo While oPlayer.playState ^<^> 1 ' 1 = Stopped >> "%~dp0mkvmerge_script-play.vbs"
+  echo WScript.Sleep 100 >> "%~dp0mkvmerge_script-play.vbs"
+  echo Wend >> "%~dp0mkvmerge_script-play.vbs"
+  echo. >> "%~dp0mkvmerge_script-play.vbs"
+  echo ' Release the audio file >> "%~dp0mkvmerge_script-play.vbs"
+  echo oPlayer.close >> "%~dp0mkvmerge_script-play.vbs"
+)
+
+
+if not exist "%~dp0bin\" (
+  md bin
 )
 
 @REM pause
@@ -24,7 +31,7 @@ if not exist "%~dp0mkvs-play.vbs" (
 
 :init
 chcp 65001 >NUL
-set ver=v5.0
+set ver=v5.2
 set nhcolor=
 set Green=%nhcolor%[32m
 set White=%nhcolor%[37m
@@ -222,7 +229,7 @@ cd..
 echo.
 echo.
 REM call "%~dp0play.bat"
-cscript //nologo "%~dp0mkvs-play.vbs"
+cscript //nologo "%~dp0mkvmerge_script-play.vbs"
 echo ```````````````````````````````````````````````````````````````
 title mkvmerge Script %ver%   [mkv+ass / %drama%]   l    Done muxing^!
 echo Finished muxing!
