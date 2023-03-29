@@ -4,7 +4,9 @@
 ::+ 5.0 - added ffprobe and mkvmerge checking
 ::+ 5.1 - reimplemented vbs playback
 ::+ 5.2 - added bin folder checking
+ 
 
+:: Make playing vbs script
 if not exist "%~dp0mkvmerge_script-play.vbs" (
   echo Dim oPlayer > "%~dp0mkvmerge_script-play.vbs"
   echo Set oPlayer = CreateObject("WMPlayer.OCX"^) >> "%~dp0mkvmerge_script-play.vbs"
