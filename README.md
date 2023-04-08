@@ -39,8 +39,8 @@
   <p align="center">
     amkvmerge_script: a fast and efficient batch script that merges multiple MKV, ASS, and XML chapter files into a single MKV file using mkvmerge.
     <br />
-    <a href="https://github.com/rjmolina13/mkvmerge_script"><strong>Explore the docs »</strong></a>
-    <br />
+    <!-- <a href="https://github.com/rjmolina13/mkvmerge_script"><strong>Explore the docs »</strong></a> -->
+    <!-- <br /> -->
     <br />
     <a href="https://github.com/rjmolina13/mkvmerge_script">View Demo</a>
     ·
