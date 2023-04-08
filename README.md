@@ -18,14 +18,14 @@
 <br />
 <div align="center">
   <a href="https://github.com/rjmolina13/mkvmerge_script">
-    <img src="images/logo.png" alt="Logo" width="300" height=45">
+    <img src="images/logo.png" alt="Logo" width="300" height=45>
   </a>
 
 ## <div style="text-align: center">mkvmerge_script <span style="font-size: 0.7em; font-style: italic">*v5.2*</span></div>
 
 <div align="center">
   <p>
-    mkvmerge_script: a fast and efficient batch script that merges multiple <code>`.mkv`</code> files, <code>`.ass`</code> files, and/or <code>`.xml`</code> chapter files into a single MKV file using mkvmerge.
+    mkvmerge_script: a fast and efficient batch script that merges multiple <code>.mkv</code> files, <code>.ass</code> files, and/or <code>.xml</code> chapter files into a single MKV file using mkvmerge.
     <br />
     <br />
     <a href="https://github.com/rjmolina13/mkvmerge_script">View Demo</a>
@@ -53,11 +53,9 @@
     <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
+        <li><a href="#setup-usage">Setup / Usage</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
@@ -71,7 +69,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+[![mkvmerge_script Screenshot][product-screenshot]](https://github.com/rjmolina13/mkvmerge_script#!)
 
 ***mkvmerge_script*** is a batch script that allows you to merge multiple `.mkv` files, `.ass` files, and/or `.xml` chapter files into a single MKV file using mkvmerge, a fast and efficient muxer.
 
@@ -96,45 +94,43 @@ This script simplifies the process of merging multiple files into a single `.mkv
 
 To use mkvmerge_script, download and place mkvmerge.exe and ffprobe.exe in the bin folder at the root directory, and then run the batch script. Do follow the prerequisites and instructions below.
 
-### Prerequisites
+### Setup / Usage
 
-To use mkvmerge_script, you will need the following:
+1. Clone the mkvmerge_script repository to your local machine or [download it from here](https://github.com/rjmolina13/mkvmerge_script/raw/main/mkvmerge_script.bat) (right click > save link as).
+2. Place the batch script in a its own separate foldder.
+3. Download the latest version of `mkvmerge` from https://mkvtoolnix.download/ and `ffprobe` from https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-essentials.7z.
+4. Extract the `mkvmerge.exe` file from the mkvtoolnix package and `ffprobe.exe` file from the ffmpeg package, place the two files in the bin folder (which you can either make or run the script once and it will make it for you) at the root directory of the script. 
 
-* A **Windows** operating system
+> Folder structure should be:
 
-* `mkvmerge` from [*mkvtoolnix*](https://mkvtoolnix.download/downloads.html#windows)
-  ```sh
-  mkvmerge.exe
-  ```
-* `ffprobe` from [*ffmpeg*](https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-essentials.7z)
-  ```sh
-  ffprobe.exe
-  ```
+```
+mkvmerge_script
+.
+|-- bin
+|   |-- ffprobe.exe
+|   `-- mkvmerge.exe
+`-- mkvmerge_script.bat
 
-### Installation
+1 directory, 3 files
+```
 
-1. Clone the *mkvmerge_script* repository to your local machine.
-2. Download the latest version of mkvtoolnix from https://mkvtoolnix.download/.
-3. Extract the `mkvmerge.exe` file from the mkvtoolnix package and place it in the `bin` folder at the root directory of the script.
-4. Download the latest version of ffmpeg from https://ffmpeg.org/download.html.
-5. Extract the `ffprobe.exe` file from the ffmpeg package and place it in the `bin` folder at the root directory of the script.
-6. Open the script!
+5. Double-click on the batch script to run it.
+6. Before you start, check your config/settings on the right side of the script window/terminal. 
+
+<img align="center" src="images/readme_1.png" alt="Config" width="40%" height="40%">
+
+7. Then input the path of the Show/`.mkv`s you want to process.
+
+<img align="center" src="images/readme_2.png" alt="Path" width="40%" height="40%">
+
+8. Finally, input the name of the show.
+
+<img align="center" src="images/readme_3.png" alt="Path" width="40%" height="40%">
+
+9. Wait for the script to finish muxing the files. *(Tip: It will play a sound to let you know that it has finished.)*
+10. It will ask you if you want to delete the source file and move the processed files to replace the source files. You may find the processed files on the path you have specified.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- USAGE EXAMPLES -->
-## Usage
-
-1. Place the batch script in the same folder as your `.mkv`, `.ass`, and/or `.xml` chapter files.
-2. Double-click on the batch script to run it.
-3. Wait for the script to finish merging the files.
-4. Find the merged `.mkv` file in the same folder as the original files.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- ROADMAP -->
 ## Roadmap
