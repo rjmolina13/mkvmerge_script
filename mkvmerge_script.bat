@@ -112,22 +112,19 @@ echo                                                                            
 echo                                                                                  ║        7:fil-tv      8:kvariety   ║
 
 echo ╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍              ║┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅║
-::echo               mkvmerge Script %ver%  [mkv+ass / %drama%]                           ║  %Cyan%season%White%: S1:S01  S2:S02)         ║
 setlocal
 set "spaces=                               "
 set "timestamp=              %Green%mkvmerge%White% %Lightgray%Script %Red%%ver%%White%  [mkv+ass / "
-set "machineName=PC-Name"
 set "message=                     ║ a:kor-mov   b:chi-mov  c:jap-mov  ║"
 set "line=%timestamp%%Yellow%%drama%%White%]%spaces%"
 set "line=%line:~0,93%  %message%
 echo %line%
-echo                            %Cyan%@Rubyjane%White%                                             ║ d:th-mov    e:eng-mov  f:fil-mov  ║
+echo                    %Cyan%@rjmolina13 - ronanj.site/gh%White%                                  ║ d:th-mov    e:eng-mov  f:fil-mov  ║
 echo ╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍              ║ %Cyan%season%White%: S1:S01  S2:S02  S3:S03    ║
 echo                                                                                  ║         S4:S04  S5:S05  S6:S06    ║
 echo                                                                                  ║         S:custom    0:default     ║
 set "spaces1=                                                "
 set "timestamp1='    Enter %Yellow%%drama%%White% Folder Path with"
-set "machineName1=PC-Name"
 set "message1=         ║         z: custom Ep   %Red%x:Exit%White%     ║"
 set "line1=%timestamp1%%spaces1%"
 set "line1=%line1:~0,80%  %message1%
@@ -181,7 +178,7 @@ echo.
 echo.
 echo %White%╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍
 echo               mkvmerge Script %ver%  [mkv+ass / %drama%]
-echo                            %Cyan%@Rubyjane%White%
+echo                    %Cyan%@rjmolina13 - ronanj.site/gh%White%  
 echo ╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍
 echo.
 pushd "%loc%"
@@ -277,7 +274,7 @@ echo.
 echo.
 echo %White%╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍
 echo               mkvmerge Script %ver%  [mkv+ass / %drama%]
-echo                            %Cyan%@Rubyjane%White%
+echo                    %Cyan%@rjmolina13 - ronanj.site/gh%White%  
 echo ╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍
 echo.
 pushd "%loc%"
@@ -325,7 +322,7 @@ echo.
 echo.
 echo %White%╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍
 echo               mkvmerge Script %ver%  [mkv+ass / %drama%]
-echo                            %Cyan%@Rubyjane%White%
+echo                    %Cyan%@rjmolina13 - ronanj.site/gh%White%  
 echo ╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍
 echo.
 pushd "%loc%"

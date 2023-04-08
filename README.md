@@ -131,6 +131,7 @@ To use mkvmerge_script, you will need the following:
 3. Extract the `mkvmerge.exe` file from the mkvtoolnix package and place it in the `bin` folder at the root directory of the script.
 4. Download the latest version of ffmpeg from https://ffmpeg.org/download.html.
 5. Extract the `ffprobe.exe` file from the ffmpeg package and place it in the `bin` folder at the root directory of the script.
+6. Open the script!
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -204,7 +205,6 @@ Project Link: [https://github.com/rjmolina13/mkvmerge_script](https://github.com
 
 - This project uses the mkvmerge utility from mkvtoolnix (https://mkvtoolnix.download/) and the ffprobe utility from ffmpeg (https://ffmpeg.org/).
 - This project was inspired by the need to quickly and easily merge multiple MKV files into a single file.
-- Special thanks to OpenAI for creating ChatGPT, the AI language model that helped me with this project.
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
