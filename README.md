@@ -1,12 +1,38 @@
 <!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
 <a name="readme-top"></a>
 
+<style>
+    .image-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .small-image {
+        height: 16px;
+        width: auto;
+    }
+</style>
+
+
+
 <!-- PROJECT SHIELDS -->
-[![Contributors][contributors-shield]][contributors-url]
+<!-- [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
+[![Visitors][Visitors]][Visitors-url] -->
+<div class="image-container">
+    <a href="[contributors-url]"><img class="small-image" src="[contributors-shield]" alt="Contributors"></a>
+    <a href="[forks-url]"><img class="small-image" src="[forks-shield]" alt="Forks"></a>
+    <a href="[stars-url]"><img class="small-image" src="[stars-shield]" alt="Stargazers"></a>
+    <a href="[issues-url]"><img class="small-image" src="[issues-shield]" alt="Issues"></a>
+    <a href="[license-url]"><img class="small-image" src="[license-shield]" alt="MIT License"></a>
+    <a href="[Visitors-url]"><img class="small-image" src="[Visitors]" alt="Visitors"></a>
+</div>
+
+
 
 <!-- PROJECT LOGO -->
 <br />
@@ -88,8 +114,7 @@ This script simplifies the process of merging multiple files into a single `.mkv
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+To use mkvmerge_script, download and place mkvmerge.exe and ffprobe.exe in the bin folder at the root directory, and then run the batch script. Do follow the prerequisites and instructions below.
 
 ### Prerequisites
 
@@ -196,6 +221,8 @@ Project Link: [https://github.com/rjmolina13/mkvmerge_script](https://github.com
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
+[Visitors]: https://shields-io-visitor-counter.herokuapp.com/badge?page=rjmolina13.mkmerge_script&labelColor=555555&color=FFFF60&style=for-the-badge
+[Visitors-url]: https://github.com/rjmolina13/mkvmerge_script#!
 [Shell]: https://img.shields.io/badge/shell_script-%23121011.svg?style=for-the-badge&logo=gnu-bash&logoColor=white
 [Shell-url]: https://github.com/rjmolina13/mkvmerge_script#!
 [Love]: https://img.shields.io/badge/love-%E2%9D%A4%EF%B8%8F-black?style=for-the-badge
