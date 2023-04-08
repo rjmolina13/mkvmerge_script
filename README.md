@@ -101,7 +101,7 @@ To use mkvmerge_script, download and place mkvmerge.exe and ffprobe.exe in the b
 3. Download the latest version of `mkvmerge` from https://mkvtoolnix.download/ and `ffprobe` from https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-essentials.7z.
 4. Extract the `mkvmerge.exe` file from the mkvtoolnix package and `ffprobe.exe` file from the ffmpeg package, place the two files in the bin folder (which you can either make or run the script once and it will make it for you) at the root directory of the script. 
 
-> Folder structure should be:
+    - Folder structure should be:
 
 ```
 mkvmerge_script
@@ -114,8 +114,8 @@ mkvmerge_script
 1 directory, 3 files
 ```
 
-5. Double-click on the batch script to run it.
-6. Before you start, check your config/settings on the right side of the script window/terminal. 
+1. Double-click on the batch script to run it.
+2. Before you start, check your config/settings on the right side of the script window/terminal. 
 
 <img align="center" src="images/readme_1.png" alt="Config" width="40%" height="40%">
 
