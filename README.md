@@ -53,7 +53,7 @@
     <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
-        <li><a href="#setup-usage">Setup / Usage</a></li>
+        <li><a href="#setup--usage">Setup / Usage</a></li>
       </ul>
     </li>
     <li><a href="#roadmap">Roadmap</a></li>
@@ -187,7 +187,7 @@ Project Link: [https://github.com/rjmolina13/mkvmerge_script](https://github.com
 
 
 - This project uses the mkvmerge utility from mkvtoolnix (https://mkvtoolnix.download/) and the ffprobe utility from ffmpeg (https://ffmpeg.org/).
-- This project was inspired by the need to quickly and easily merge multiple MKV files into a single file.
+- This project was inspired by the need to quickly and easily process multiple `.mkv` and `.ass` files into a each single file.
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
