@@ -3,20 +3,13 @@
 
 
 <!-- PROJECT SHIELDS -->
-<!-- [![Contributors][contributors-shield]][contributors-url]
+[![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
-[![Visitors][Visitors]][Visitors-url] -->
-<div style="display: flex; justify-content: center; align-items: center;">
-    <a href="[contributors-url]"><img style="height: 16px; width: auto;" src="[contributors-shield]" alt="Contributors"></a>
-    <a href="[forks-url]"><img style="height: 16px; width: auto;" src="[forks-shield]" alt="Forks"></a>
-    <a href="[stars-url]"><img style="height: 16px; width: auto;" src="[stars-shield]" alt="Stargazers"></a>
-    <a href="[issues-url]"><img style="height: 16px; width: auto;" src="[issues-shield]" alt="Issues"></a>
-    <a href="[license-url]"><img style="height: 16px; width: auto;" src="[license-shield]" alt="MIT License"></a>
-    <a href="[Visitors-url]"><img style="height: 16px; width: auto;" src="[Visitors]" alt="Visitors"></a>
-</div>
+[![Visitors][Visitors]][Visitors-url]
+
 
 
 
