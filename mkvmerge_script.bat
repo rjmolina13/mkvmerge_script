@@ -4,9 +4,9 @@
 ::+ 5.0 - added ffprobe and mkvmerge checking
 ::+ 5.1 - reimplemented vbs playback
 ::+ 5.2 - added bin folder checking
- 
+::+ 5.3 - reduced lines, calls :header instead of printing header mutiple lines
 
-:: Make playing vbs script
+:: Check play sound vbs if exists else creates
 if not exist "%~dp0mkvmerge_script-play.vbs" (
   echo Dim oPlayer > "%~dp0mkvmerge_script-play.vbs"
   echo Set oPlayer = CreateObject("WMPlayer.OCX"^) >> "%~dp0mkvmerge_script-play.vbs"
@@ -22,18 +22,17 @@ if not exist "%~dp0mkvmerge_script-play.vbs" (
   echo oPlayer.close >> "%~dp0mkvmerge_script-play.vbs"
 )
 
-
+:: Checks if bin folder exists else creates
 if not exist "%~dp0bin\" (
   md bin
 )
 
-@REM pause
-@REM exit /b
-
-
+:: Initialization of variables and checking of files
 :init
+:: Enable rendering of ASCII symbols
 chcp 65001 >NUL
-set ver=v5.2
+set ver=v5.3
+:: Define ASCII Colors
 set nhcolor=
 set Green=%nhcolor%[32m
 set White=%nhcolor%[37m
@@ -46,10 +45,10 @@ set Lightgray=%nhcolor%[38m
 set Bold=%nhcolor%[1m
 
 call :header
-
 set "mkvmerge="
 for /f "delims=" %%i in ('dir /s /b /a-d "mkvmerge*.exe" 2^>nul') do set "mkvmerge=%%i" & goto :mkvmbreak
 
+:: :mkvmbreak and :ffbreak checks if dependencies exists else prompts user to download
 :mkvmbreak
 if "%mkvmerge%" == "" (
   echo.
@@ -84,24 +83,22 @@ if "%ffprobe%" == "" (
 ) else (
   rem ffprobe found!
 )
-
 cls
 
 
-
+:: Real start
 :start
 set season=S01
-set mkvmerge="%~dp0bin\mkvmerge.exe"
-set ffprobe="%~dp0bin\ffprobe.exe"
 set lang=kor
 set drama=KDrama
 set type=drama
-
 set /a count = 0
+
+:: Main manu
 :main
 ::=================================================================================
-title mkvmerge Script %ver%  [mkv+ass / %drama%] - %Season% %count%
-if "%type%"=="movie" (title mkvmerge Script %ver%  [mkv+ass / %drama%])
+title mkvmerge_script %ver%  [mkv+ass / %drama%] - %Season% %count%
+if "%type%"=="movie" (title mkvmerge_script %ver%  [mkv+ass / %drama%])
 
 
 setlocal enableextensions enabledelayedexpansion	
@@ -114,10 +111,10 @@ echo                                                                            
 echo ╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍              ║┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅║
 setlocal
 set "spaces=                               "
-set "timestamp=              %Green%mkvmerge%White% %Lightgray%Script %Red%%ver%%White%  [mkv+ass / "
-set "message=                     ║ a:kor-mov   b:chi-mov  c:jap-mov  ║"
-set "line=%timestamp%%Yellow%%drama%%White%]%spaces%"
-set "line=%line:~0,93%  %message%
+set "title1a=           %Green%mkvmerge%White%_%Lightgray%script %Red%%ver%%White%  [mkv+ass / "
+set "title1b=                   ║ a:kor-mov   b:chi-mov  c:jap-mov  ║"
+set "line=%title1a%%Yellow%%drama%%White% + %Yellow%%season%%White%]%spaces%"
+set "line=%line:~0,105%  %title1b%
 echo %line%
 echo                    %Cyan%@rjmolina13 - ronanj.site/gh%White%                                  ║ d:th-mov    e:eng-mov  f:fil-mov  ║
 echo ╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍              ║ %Cyan%season%White%: S1:S01  S2:S02  S3:S03    ║
@@ -172,14 +169,7 @@ cls
 :season
 if "%type%"=="movie" (goto movie)
 if "%type%"=="variety" (goto variety)
-echo.
-echo.
-echo.
-echo.
-echo %White%╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍
-echo               mkvmerge Script %ver%  [mkv+ass / %drama%]
-echo                    %Cyan%@rjmolina13 - ronanj.site/gh%White%  
-echo ╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍
+call :header
 echo.
 pushd "%loc%"
 if exist "*SP*" md sp && move "*SP*" sp
@@ -199,7 +189,7 @@ for %%A IN (*.mkv) do (
   echo.
   echo "%title% - %season%E0!count!"
 echo =====================================
-title mkvmerge Script %ver%   [mkv+ass / %drama%]    l     Muxing...  "%%~nA.mkv"    l     "%title% - %season%E0!count!"
+title mkvmerge_script %ver%   [mkv+ass / %drama%]    l     Muxing...  "%%~nA.mkv"    l     "%title% - %season%E0!count!"
 <nul set /p ="Video resolution is: "
 %ffprobe% -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 "%%~nA.mkv"
 %mkvmerge% -o "out\%%~nA.mkv" --title "%title% - %season%E0!count!" --no-subtitles --no-attachments --track-name "0:" --language "0:%lang%" --track-name "1:" --language "1:%lang%" "%%~A" --track-name "0:English [Rubyj]" --language "0:eng" --forced-track "0:yes" --default-track "0:yes" "%%~nA.ass" --no-track-tags --no-global-tags
@@ -217,7 +207,7 @@ for %%A IN (*.mkv) do (
   echo.
   echo "%title% - %season%SP0!count!"
 echo =====================================
-title mkvmerge Script %ver%   [mkv+ass / %drama%]    l     Muxing...  "%%~nA.mkv"    l     "%title% - %season%SP0!count!"
+title mkvmerge_script %ver%   [mkv+ass / %drama%]    l     Muxing...  "%%~nA.mkv"    l     "%title% - %season%SP0!count!"
 <nul set /p ="Video resolution is: "
 %ffprobe% -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 "%%~nA.mkv"
 %mkvmerge% -o "out\%%~nA.mkv" --title "%title% - %season%SP0!count!" --no-subtitles --no-attachments --track-name "0:" --language "0:%lang%" --track-name "1:" --language "1:%lang%" "%%~A" --track-name "0:English [Rubyj]" --language "0:eng" --forced-track "0:yes" --default-track "0:yes" "%%~nA.ass" --no-track-tags --no-global-tags
@@ -227,10 +217,9 @@ cd..
 :ending
 echo.
 echo.
-REM call "%~dp0play.bat"
 cscript //nologo "%~dp0mkvmerge_script-play.vbs"
 echo ```````````````````````````````````````````````````````````````
-title mkvmerge Script %ver%   [mkv+ass / %drama%]   l    Done muxing^!
+title mkvmerge_script %ver%   [mkv+ass / %drama%]   l    Done muxing^!
 echo Finished muxing!
 echo.
 echo Would you like to move finished muxed files to root dir?
@@ -262,20 +251,11 @@ echo %cd%
 if exist sp (cd sp && md empty && robocopy empty "%cd%\sp" *.mkv /njs /njh /nc /purge)
 if exist out (rd empty && move "out\*.mkv" && rd out && cd.. && move "sp\*.mkv" && del "sp\*.ass" && rd sp)
 if exist srt (rd srt)
-::if exist srt (cd srt && md empty && robocopy empty "%cd%\srt" *.srt /njs /njh /nc /purge && rd /s empty && cd.. && rd /s srt)
 pause
 exit
-::(goto) 2>nul & del "%~f0"
 
 :movie
-echo.
-echo.
-echo.
-echo.
-echo %White%╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍
-echo               mkvmerge Script %ver%  [mkv+ass / %drama%]
-echo                    %Cyan%@rjmolina13 - ronanj.site/gh%White%  
-echo ╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍
+call :header
 echo.
 pushd "%loc%"
 echo.
@@ -293,7 +273,7 @@ for %%A IN (*.mkv) do (
   echo.
   echo "%title%"
 echo =====================================
-title mkvmerge Script %ver%   [mkv+ass / %drama%]    l     Muxing...  "%%~nA.mkv"    l     "%title%"
+title mkvmerge_script %ver%   [mkv+ass / %drama%]    l     Muxing...  "%%~nA.mkv"    l     "%title%"
 <nul set /p ="Video resolution is: "
 %ffprobe% -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 "%%~nA.mkv"
 %mkvmerge% -o "out\%%~nA.mkv" --title "%title%" --no-subtitles --no-attachments --audio-tracks "1" --track-name "0:" --language "0:%lang%" --track-name "1:" --language "1:%lang%" "%%~A" --track-name "0:English [Rubyj]" --language "0:eng" --forced-track "0:yes" --default-track "0:yes" "%%~nA.ass" --no-track-tags --no-global-tags
@@ -302,28 +282,10 @@ echo.
 )
 echo.
 echo.
-echo.
-REM call "%~dp0play.bat"
-cscript //nologo "%~f0?.wsf"
-echo ```````````````````````````````````````````````````````````````
-title mkvmerge Script %ver%   [mkv+ass / %drama%]   l    Done muxing^!
-echo Finished muxing!
-echo.
-echo Would you like to move finished muxed files to root dir?
-CHOICE  /C:12 /N /M "1) Yes // 2) No: "
-IF ERRORLEVEL 2 GOTO wewno
-IF ERRORLEVEL 1 GOTO wewyes
-echo.
+goto :ending
 
 :variety
-echo.
-echo.
-echo.
-echo.
-echo %White%╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍
-echo               mkvmerge Script %ver%  [mkv+ass / %drama%]
-echo                    %Cyan%@rjmolina13 - ronanj.site/gh%White%  
-echo ╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍
+call :header
 echo.
 pushd "%loc%"
 echo.
@@ -352,7 +314,7 @@ for %%A IN (*.mkv) do (
   echo.
   echo "%title% - %season%E0!count!"
 echo =====================================
-title mkvmerge Script %ver%   [mkv+ass / %drama%]    l     Muxing...  "%%~nA.mkv"    l     "%title% - %season%E0!count!"
+title mkvmerge_script %ver%   [mkv+ass / %drama%]    l     Muxing...  "%%~nA.mkv"    l     "%title% - %season%E0!count!"
 <nul set /p ="Video resolution is: "
 %ffprobe% -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 "%%~nA.mkv"
 %mkvmerge% -o "out\%%~nA.mkv" --title "%title% - %season%E0!count!" --no-subtitles --no-attachments --track-name "0:" --language "0:%lang%" --track-name "1:" --language "1:%lang%" "%%~A" --track-name "0:English [Rubyj]" --language "0:eng" --forced-track "0:yes" --default-track "0:yes" "%%~nA.ass" --no-track-tags --no-global-tags
@@ -370,7 +332,7 @@ for %%A IN (*.mkv) do (
   echo.
   echo "%title% - %season%SP0!count!"
 echo =====================================
-title mkvmerge Script %ver%   [mkv+ass / %drama%]    l     Muxing...  "%%~nA.mkv"    l     "%title% - %season%SP0!count!"
+title mkvmerge_script %ver%   [mkv+ass / %drama%]    l     Muxing...  "%%~nA.mkv"    l     "%title% - %season%SP0!count!"
 <nul set /p ="Video resolution is: "
 %ffprobe% -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 "%%~nA.mkv"
 %mkvmerge% -o "out\%%~nA.mkv" --title "%title% - %season%SP0!count!" --no-subtitles --no-attachments --track-name "0:" --language "0:%lang%" --track-name "1:" --language "1:%lang%" "%%~A" --track-name "0:English [Rubyj]" --language "0:eng" --forced-track "0:yes" --default-track "0:yes" "%%~nA.ass" --no-track-tags --no-global-tags
@@ -391,7 +353,7 @@ for %%A IN (*.mkv) do (
   echo.
   echo "%title% - %season%E0!count!"
 echo =====================================
-title mkvmerge Script %ver%   [mkv+ass / %drama%]    l     Muxing...  "%%~nA.mkv"    l     "%title% - %season%E0!count!"
+title mkvmerge_script %ver%   [mkv+ass / %drama%]    l     Muxing...  "%%~nA.mkv"    l     "%title% - %season%E0!count!"
 <nul set /p ="Video resolution is: "
 %ffprobe% -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 "%%~nA.mkv"
 %mkvmerge% -o "out\%%~nA.mkv" --title "%title% - %season%E0!count!" --no-subtitles --no-attachments --track-name "0:" --language "0:%lang%" --track-name "1:" --language "1:%lang%" "%%~A" --track-name "0:English [Rubyj]" --language "0:eng" --forced-track "0:yes" --default-track "0:yes" "%%~nA.ass" --no-track-tags --no-global-tags
@@ -409,7 +371,7 @@ for %%A IN (*.mkv) do (
   echo.
   echo "%title% - %season%SP0!count!"
 echo =====================================
-title mkvmerge Script %ver%   [mkv+ass / %drama%]    l     Muxing...  "%%~nA.mkv"    l     "%title% - %season%SP0!count!"
+title mkvmerge_script %ver%   [mkv+ass / %drama%]    l     Muxing...  "%%~nA.mkv"    l     "%title% - %season%SP0!count!"
 <nul set /p ="Video resolution is: "
 %ffprobe% -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 "%%~nA.mkv"
 %mkvmerge% -o "out\%%~nA.mkv" --title "%title% - %season%SP0!count!" --no-subtitles --no-attachments --track-name "0:" --language "0:%lang%" --track-name "1:" --language "1:%lang%" "%%~A" --track-name "0:English [Rubyj]" --language "0:eng" --forced-track "0:yes" --default-track "0:yes" "%%~nA.ass" --no-track-tags --no-global-tags
@@ -421,13 +383,7 @@ goto ending
 
 :z
 cls
-echo.
-echo.
-echo.
-echo %White%╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍
-echo               mkvmerge Script %ver%  [mkv+ass / %drama%]
-echo                            %Cyan%@Rubyjane%White%
-echo ╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍
+call :header
 echo.
 echo.
 echo %White%'    Current Episode: %Yellow% !count! %White%
@@ -444,13 +400,7 @@ cls && goto main
 
 :s
 cls
-echo.
-echo.
-echo.
-echo %White%╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍
-echo               mkvmerge Script %ver%  [mkv+ass / %drama%]
-echo                            %Cyan%@Rubyjane%White%
-echo ╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍
+call :header
 echo.
 echo.
 echo %White%'    Current Season: %Yellow% %Season% %White%
@@ -468,8 +418,8 @@ echo.
 echo.
 echo.
 echo.
-echo ╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍
-echo                       %Green%mkvmerge%White% %Lightgray%Script %Red%%ver%%White%
-echo                            %Cyan%@Rubyjane%White%
+echo %White% ╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍
+echo            %Green%mkvmerge%White%_%Lightgray%script %Red%%ver%%White%  [mkv+ass / %Yellow%%drama%%White% + %Yellow%%season%%White%]%spaces%
+echo                    %Cyan%@rjmolina13 - ronanj.site/gh%White%
 echo ╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍  
 goto :eof
