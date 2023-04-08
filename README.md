@@ -117,15 +117,15 @@ mkvmerge_script
 1. Double-click on the batch script to run it.
 2. Before you start, check your config/settings on the right side of the script window/terminal. 
 
-<img align="center" src="images/readme_1.png" alt="Config" width="40%" height="40%">
+<img align="center" src="images/readme_1.png" alt="Config" width="30%" height="30%">
 
 7. Then input the path of the Show/`.mkv`s you want to process.
 
-<img align="center" src="images/readme_2.png" alt="Path" width="40%" height="40%">
+<img align="center" src="images/readme_2.png" alt="Path" width="55%" height="55%">
 
 8. Finally, input the name of the show.
 
-<img align="center" src="images/readme_3.png" alt="Path" width="40%" height="40%">
+<img align="center" src="images/readme_3.png" alt="Path" width="55%" height="55%">
 
 9. Wait for the script to finish muxing the files. *(Tip: It will play a sound to let you know that it has finished.)*
 10. It will ask you if you want to delete the source file and move the processed files to replace the source files. You may find the processed files on the path you have specified.
