@@ -15,13 +15,12 @@
     <img src="images/logo.png" alt="Logo" width="300" height=45">
   </a>
 
-### <div style="text-align: center">mkvmerge_script <span style="font-size: 0.8em; font-style: italic">*v5.2*</span></div>
+## <div style="text-align: center">mkvmerge_script <span style="font-size: 0.7em; font-style: italic">*v5.2*</span></div>
 
-  <p align="center">
-    mkvmerge_script: a fast and efficient batch script that merges multiple`.mkv` files, `.ass` files, and/or `.xml` chapter files into a single MKV file using mkvmerge.
+<div align="center">
+  <p>
+    mkvmerge_script: a fast and efficient batch script that merges multiple <code>`.mkv`</code> files, <code>`.ass`</code> files, and/or <code>`.xml`</code> chapter files into a single MKV file using mkvmerge.
     <br />
-    <!-- <a href="https://github.com/rjmolina13/mkvmerge_script"><strong>Explore the docs »</strong></a> -->
-    <!-- <br /> -->
     <br />
     <a href="https://github.com/rjmolina13/mkvmerge_script">View Demo</a>
     ·
@@ -29,6 +28,8 @@
     ·
     <a href="https://github.com/rjmolina13/mkvmerge_script/issues">Request Feature</a>
   </p>
+</div>
+
 </div>
 
 
