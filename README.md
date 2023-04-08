@@ -1,20 +1,6 @@
 <!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
 <a name="readme-top"></a>
 
-<style>
-    .image-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .small-image {
-        height: 16px;
-        width: auto;
-    }
-</style>
-
-
 
 <!-- PROJECT SHIELDS -->
 <!-- [![Contributors][contributors-shield]][contributors-url]
@@ -23,14 +9,15 @@
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
 [![Visitors][Visitors]][Visitors-url] -->
-<div class="image-container">
-    <a href="[contributors-url]"><img class="small-image" src="[contributors-shield]" alt="Contributors"></a>
-    <a href="[forks-url]"><img class="small-image" src="[forks-shield]" alt="Forks"></a>
-    <a href="[stars-url]"><img class="small-image" src="[stars-shield]" alt="Stargazers"></a>
-    <a href="[issues-url]"><img class="small-image" src="[issues-shield]" alt="Issues"></a>
-    <a href="[license-url]"><img class="small-image" src="[license-shield]" alt="MIT License"></a>
-    <a href="[Visitors-url]"><img class="small-image" src="[Visitors]" alt="Visitors"></a>
+<div style="display: flex; justify-content: center; align-items: center;">
+    <a href="[contributors-url]"><img style="height: 16px; width: auto;" src="[contributors-shield]" alt="Contributors"></a>
+    <a href="[forks-url]"><img style="height: 16px; width: auto;" src="[forks-shield]" alt="Forks"></a>
+    <a href="[stars-url]"><img style="height: 16px; width: auto;" src="[stars-shield]" alt="Stargazers"></a>
+    <a href="[issues-url]"><img style="height: 16px; width: auto;" src="[issues-shield]" alt="Issues"></a>
+    <a href="[license-url]"><img style="height: 16px; width: auto;" src="[license-shield]" alt="MIT License"></a>
+    <a href="[Visitors-url]"><img style="height: 16px; width: auto;" src="[Visitors]" alt="Visitors"></a>
 </div>
+
 
 
 
