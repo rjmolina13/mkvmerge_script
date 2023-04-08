@@ -23,30 +23,30 @@
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
+<!-- [![LinkedIn][linkedin-shield]][linkedin-url] -->
 
 
 
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/github_username/repo_name">
+  <a href="https://github.com/rjmolina13/mkvmerge_script">
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">mkvmerge_script</h3>
 
   <p align="center">
-    project_description
+    amkvmerge_script: a fast and efficient batch script that merges multiple MKV, ASS, and XML chapter files into a single MKV file using mkvmerge.
     <br />
-    <a href="https://github.com/github_username/repo_name"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/rjmolina13/mkvmerge_script"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/github_username/repo_name">View Demo</a>
+    <a href="https://github.com/rjmolina13/mkvmerge_script">View Demo</a>
     ·
-    <a href="https://github.com/github_username/repo_name/issues">Report Bug</a>
+    <a href="https://github.com/rjmolina13/mkvmerge_script/issues">Report Bug</a>
     ·
-    <a href="https://github.com/github_username/repo_name/issues">Request Feature</a>
+    <a href="https://github.com/rjmolina13/mkvmerge_script/issues">Request Feature</a>
   </p>
 </div>
 
@@ -109,27 +109,26 @@ To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
+To use mkvmerge_script, you will need the following:
+
+* A **Windows** operating system
+
+* `mkvmerge` from [*mkvtoolnix*](https://mkvtoolnix.download/downloads.html#windows)
   ```sh
-  npm install npm@latest -g
+  mkvmerge.exe
+  ```
+* `ffprobe` from [*ffmpeg*](https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-essentials.7z)
+  ```sh
+  ffprobe.exe
   ```
 
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
-   ```sh
-   git clone https://github.com/github_username/repo_name.git
-   ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
+1. Clone the *mkvmerge_script* repository to your local machine.
+2. Download the latest version of mkvtoolnix from https://mkvtoolnix.download/.
+3. Extract the `mkvmerge.exe` file from the mkvtoolnix package and place it in the `bin` folder at the root directory of the script.
+4. Download the latest version of ffmpeg from https://ffmpeg.org/download.html.
+5. Extract the `ffprobe.exe` file from the ffmpeg package and place it in the `bin` folder at the root directory of the script.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -138,9 +137,10 @@ This is an example of how to list things you need to use the software and how to
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
+1. Place the batch script in the same folder as your `.mkv`, `.ass`, and/or `.xml` chapter files.
+2. Double-click on the batch script to run it.
+3. Wait for the script to finish merging the files.
+4. Find the merged `.mkv` file in the same folder as the original files.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -149,12 +149,10 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
+- [ ] Implement wget auto download for prereqs
+- [ ] Implement auto extraction of downloaded prereqs
 
-See the [open issues](https://github.com/github_username/repo_name/issues) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/rjmolina13/mkvmerge_script/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -169,9 +167,9 @@ If you have a suggestion that would make this better, please fork the repo and c
 Don't forget to give the project a star! Thanks again!
 
 1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
+2. Create your Feature Branch (`git checkout -b feature/NewFeature`)
+3. Commit your Changes (`git commit -m 'Add some NewFeature'`)
+4. Push to the Branch (`git push origin feature/NewFeature`)
 5. Open a Pull Request
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -181,7 +179,7 @@ Don't forget to give the project a star! Thanks again!
 <!-- LICENSE -->
 ## License
 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
+This project is licensed under the terms of the GNU General Public License v3.0. See `LICENSE.txt` for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -190,9 +188,9 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
+@rjmolina13 - [@rjmolina13](https://twitter.com/rjmolina13) - rj.molina13.2@gmail.com
 
-Project Link: [https://github.com/github_username/repo_name](https://github.com/github_username/repo_name)
+Project Link: [https://github.com/rjmolina13/mkvmerge_script](https://github.com/rjmolina13/mkvmerge_script)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -201,9 +199,11 @@ Project Link: [https://github.com/github_username/repo_name](https://github.com/
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-* []()
-* []()
-* []()
+
+- This project uses the mkvmerge utility from mkvtoolnix (https://mkvtoolnix.download/) and the ffprobe utility from ffmpeg (https://ffmpeg.org/).
+- This project was inspired by the need to quickly and easily merge multiple MKV files into a single file.
+- Special thanks to OpenAI for creating ChatGPT, the AI language model that helped me with this project.
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -213,20 +213,19 @@ Project Link: [https://github.com/github_username/repo_name](https://github.com/
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
 [Shell]: https://img.shields.io/badge/shell_script-%23121011.svg?style=for-the-badge&logo=gnu-bash&logoColor=white
-[Shell-url]: !
+[Shell-url]: https://github.com/rjmolina13/mkvmerge_script#!
 [Love]: https://img.shields.io/badge/love-%E2%9D%A4%EF%B8%8F-black?style=for-the-badge
-[Love-url]: !
-[contributors-shield]: https://img.shields.io/github/contributors/github_username/repo_name.svg?style=for-the-badge
-[contributors-url]: https://github.com/github_username/repo_name/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/github_username/repo_name.svg?style=for-the-badge
-[forks-url]: https://github.com/github_username/repo_name/network/members
-[stars-shield]: https://img.shields.io/github/stars/github_username/repo_name.svg?style=for-the-badge
-[stars-url]: https://github.com/github_username/repo_name/stargazers
-[issues-shield]: https://img.shields.io/github/issues/github_username/repo_name.svg?style=for-the-badge
-[issues-url]: https://github.com/github_username/repo_name/issues
-[license-shield]: https://img.shields.io/github/license/github_username/repo_name.svg?style=for-the-badge
-[license-url]: https://github.com/github_username/repo_name/blob/master/LICENSE.txt
+[Love-url]: https://github.com/rjmolina13/mkvmerge_script#!
+[contributors-shield]: https://img.shields.io/github/contributors/rjmolina13/mkvmerge_script.svg?style=for-the-badge
+[contributors-url]: https://github.com/rjmolina13/mkvmerge_script/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/rjmolina13/mkvmerge_script.svg?style=for-the-badge
+[forks-url]: https://github.com/rjmolina13/mkvmerge_script/network/members
+[stars-shield]: https://img.shields.io/github/stars/rjmolina13/mkvmerge_script.svg?style=for-the-badge
+[stars-url]: https://github.com/rjmolina13/mkvmerge_script/stargazers
+[issues-shield]: https://img.shields.io/github/issues/rjmolina13/mkvmerge_script.svg?style=for-the-badge
+[issues-url]: https://github.com/rjmolina13/mkvmerge_script/issues
+[license-shield]: https://img.shields.io/github/license/rjmolina13/mkvmerge_script.svg?style=for-the-badge
+[license-url]: https://github.com/rjmolina13/mkvmerge_script/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/linkedin_username
 [product-screenshot]: images/screenshot.png
 

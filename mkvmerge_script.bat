@@ -56,7 +56,7 @@ if "%mkvmerge%" == "" (
   echo       %Bold%Please press any key to continue..%White%
   pause >nul
   start "" explorer %~dp0
-  start https://mkvtoolnix.download/windows/releases/74.0.0/mkvtoolnix-64-bit-74.0.0.7z
+  start https://mkvtoolnix.download/downloads.html#windows
   timeout 5 >nul
   exit /b
 ) else (
