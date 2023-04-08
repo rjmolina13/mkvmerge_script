@@ -31,7 +31,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/rjmolina13/mkvmerge_script">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="images/logo.png" alt="Logo" width="300" height=45">
   </a>
 
 <h3 align="center">mkvmerge_script</h3>
@@ -85,11 +85,13 @@
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
-A batch script for 
+***mkvmerge_script*** is a batch script that allows you to merge multiple `.mkv` files, `.ass` files, and/or `.xml` chapter files into a single MKV file using mkvmerge, a fast and efficient muxer.
+
+This script simplifies the process of merging multiple files into a single `.mkv` file by automating the process. You no longer have to manually run mkvmerge for each file and keep track of the order of files to merge. Just add your `.mkv` files, `.ass` files, and/or `.xml` chapter files to the same folder and run the script.
+
+***mkvmerge_script*** will scan the folder for all the files and merge them into a single MKV file in the correct order, with the subtitles and chapters properly aligned. 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 ### Built With
 
