@@ -15,7 +15,7 @@
     <img src="images/logo.png" alt="Logo" width="300" height=45">
   </a>
 
-<h3 align="center">mkvmerge_script *v5.2*</h3>
+### <div style="text-align: center">mkvmerge_script <span style="font-size: 0.8em; font-style: italic">*v5.2*</span></div>
 
   <p align="center">
     mkvmerge_script: a fast and efficient batch script that merges multiple`.mkv` files, `.ass` files, and/or `.xml` chapter files into a single MKV file using mkvmerge.
