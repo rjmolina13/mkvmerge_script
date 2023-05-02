@@ -5,6 +5,7 @@
 ::+ 5.1 - reimplemented vbs playback
 ::+ 5.2 - added bin folder checking
 ::+ 5.3 - reduced lines, calls :header instead of printing header mutiple lines
+::+ 5.4 - colorized current show being processed
 
 :: Check play sound vbs if exists else creates
 if not exist "%~dp0mkvmerge_script-play.vbs" (
@@ -31,7 +32,7 @@ if not exist "%~dp0bin\" (
 :init
 :: Enable rendering of ASCII symbols
 chcp 65001 >NUL
-set ver=v5.3
+set ver=v5.4
 :: Define ASCII Colors
 set nhcolor=
 set Green=%nhcolor%[32m
@@ -187,7 +188,7 @@ cls
 for %%A IN (*.mkv) do (
   set /a count += 1
   echo.
-  echo "%title% - %season%E0!count!"
+  echo %Yellow%"%title% - %season%E0!count!"%White%
 echo =====================================
 title mkvmerge_script %ver%   [mkv+ass / %drama%]    l     Muxing...  "%%~nA.mkv"    l     "%title% - %season%E0!count!"
 <nul set /p ="Video resolution is: "
@@ -205,7 +206,7 @@ for %%A IN (*.mkv) do (
   echo.
   set /a count += 1
   echo.
-  echo "%title% - %season%SP0!count!"
+  echo %Yellow%"%title% - %season%SP0!count!"%White%
 echo =====================================
 title mkvmerge_script %ver%   [mkv+ass / %drama%]    l     Muxing...  "%%~nA.mkv"    l     "%title% - %season%SP0!count!"
 <nul set /p ="Video resolution is: "
@@ -271,7 +272,7 @@ cls
 echo %loc%
 for %%A IN (*.mkv) do (
   echo.
-  echo "%title%"
+  echo %Yellow%"%title%"%White%
 echo =====================================
 title mkvmerge_script %ver%   [mkv+ass / %drama%]    l     Muxing...  "%%~nA.mkv"    l     "%title%"
 <nul set /p ="Video resolution is: "
@@ -312,7 +313,7 @@ cls
 for %%A IN (*.mkv) do (
   set /a count += 1
   echo.
-  echo "%title% - %season%E0!count!"
+  echo %Yellow%"%title% - %season%E0!count!"%White%
 echo =====================================
 title mkvmerge_script %ver%   [mkv+ass / %drama%]    l     Muxing...  "%%~nA.mkv"    l     "%title% - %season%E0!count!"
 <nul set /p ="Video resolution is: "
@@ -330,7 +331,7 @@ for %%A IN (*.mkv) do (
   echo.
   set /a count += 1
   echo.
-  echo "%title% - %season%SP0!count!"
+  echo %Yellow%"%title% - %season%SP0!count!"%White%
 echo =====================================
 title mkvmerge_script %ver%   [mkv+ass / %drama%]    l     Muxing...  "%%~nA.mkv"    l     "%title% - %season%SP0!count!"
 <nul set /p ="Video resolution is: "
@@ -351,7 +352,7 @@ cls
 for %%A IN (*.mkv) do (
   set /a count += 1
   echo.
-  echo "%title% - %season%E0!count!"
+  echo %Yellow%"%title% - %season%E0!count!"%White%
 echo =====================================
 title mkvmerge_script %ver%   [mkv+ass / %drama%]    l     Muxing...  "%%~nA.mkv"    l     "%title% - %season%E0!count!"
 <nul set /p ="Video resolution is: "
@@ -369,7 +370,7 @@ for %%A IN (*.mkv) do (
   echo.
   set /a count += 1
   echo.
-  echo "%title% - %season%SP0!count!"
+  echo %Yellow%"%title% - %season%SP0!count!"%White%
 echo =====================================
 title mkvmerge_script %ver%   [mkv+ass / %drama%]    l     Muxing...  "%%~nA.mkv"    l     "%title% - %season%SP0!count!"
 <nul set /p ="Video resolution is: "
