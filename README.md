@@ -21,7 +21,7 @@
     <img src="images/logo.png" alt="Logo" width="300" height=45>
   </a>
 
-## <div style="text-align: center">mkvmerge_script <span style="font-size: 0.7em; font-style: italic">*v5.3*</span></div>
+## <div style="text-align: center">mkvmerge_script <span style="font-size: 0.7em; font-style: italic">*v5.4*</span></div>
 
 <div align="center">
   <p>
