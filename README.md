@@ -198,7 +198,7 @@ Project Link: [https://github.com/rjmolina13/mkvmerge_script](https://github.com
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
 <!--  [Visitors]: https://shields-io-visitor-counter.herokuapp.com/badge?page=rjmolina13.mkmerge_script&labelColor=555555&color=FFFF60&style=for-the-badge  -->
-[Visitors]: https://komarev.com/ghpvc/?username=rjmolina13&labelColor=555555&color=FFFF60&style=for-the-badge
+[Visitors]: https://vbr.wocr.tk/badge?page_id=rjmolina13-mkvmergescript&labelColor=555555&color=FFFF60&style=for-the-badge
 [Visitors-url]: https://github.com/rjmolina13/mkvmerge_script#!
 [Shell]: https://img.shields.io/badge/shell_script-%23121011.svg?style=for-the-badge&logo=gnu-bash&logoColor=white
 [Shell-url]: https://github.com/rjmolina13/mkvmerge_script#!
