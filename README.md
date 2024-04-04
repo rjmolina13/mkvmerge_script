@@ -1,6 +1,7 @@
 <!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
 <a name="readme-top"></a>
 
+<img src="https://moe-counter.glitch.me/get/@:rjmolina13" alt="Image" width="140" height="40">
 
 <!-- PROJECT SHIELDS -->
 [![Contributors][contributors-shield]][contributors-url]
@@ -8,7 +9,7 @@
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
-[![Visitors][Visitors]][Visitors-url]
+<!-- [![Visitors][Visitors]][Visitors-url] -->
 
 
 
@@ -197,8 +198,7 @@ Project Link: [https://github.com/rjmolina13/mkvmerge_script](https://github.com
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
-<!--  [Visitors]: https://shields-io-visitor-counter.herokuapp.com/badge?page=rjmolina13.mkmerge_script&labelColor=555555&color=FFFF60&style=for-the-badge  -->
-[Visitors]: https://vbr.wocr.tk/badge?page_id=rjmolina13-mkvmergescript&labelColor=555555&color=FFFF60&style=for-the-badge
+[Visitors]: https://moe-counter.glitch.me/get/@:rjmolina13
 [Visitors-url]: https://github.com/rjmolina13/mkvmerge_script#!
 [Shell]: https://img.shields.io/badge/shell_script-%23121011.svg?style=for-the-badge&logo=gnu-bash&logoColor=white
 [Shell-url]: https://github.com/rjmolina13/mkvmerge_script#!
