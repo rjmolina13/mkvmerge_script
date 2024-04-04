@@ -11,7 +11,7 @@
 ::+ 5.8 - add auto 7zip detection & download
 ::+ 5.9 - improvements
 ::+ 6.0 - batch script final ver
-
+::+ 6.1 - fixes
 
 :: Check play sound vbs if exists else creates
 if not exist "%~dp0mkvmerge_script-play.vbs" (
@@ -38,7 +38,7 @@ if not exist "%~dp0bin\" (
 :init
 :: Enable rendering of ASCII symbols
 chcp 65001 >NUL
-set ver=v6.0
+set ver=v6.1
 
 :: Define ASCII Colors
 set nhcolor=
@@ -59,6 +59,7 @@ set lang=kor
 set drama=KDrama
 set type=drama
 set /a count = 0
+title mkvmerge_script %ver%  [mkv+ass / %drama%] - %Season% %count%
 
 :: Variables, url, version, filename
 set sz="C:\Program Files\7-Zip\7z.exe"
@@ -84,7 +85,7 @@ for /f "delims=" %%i in ('dir /s /b /a-d ".\bin\mkvmerge*.exe" 2^>nul') do set "
 :mkvmbreak
 if "%mkvmerge%" == "" (
   echo.
-  echo   ^>   %Red%Error^^! %White%File %Yellow%mkvmerge*.exe %White%not found!
+  echo   ^>   %Red%Error^! %White%File %Yellow%mkvmerge.exe %White%not found!
   echo       %Bold%Please download %Yellow%mkvmerge.exe %White% and extract it to the same folder with this script.
   echo       %Bold%Please press any key to continue..%White%
   pause >nul
@@ -103,14 +104,16 @@ for /f "delims=" %%i in ('dir /s /b /a-d "ffprobe*.exe" 2^>nul') do set "ffprobe
 :ffbreak
 if "%ffprobe%" == "" (
   echo.
-  echo   ^>   %Red%Error^! %White%File %Yellow%ffprobe*.exe %White%not found!
-  echo       %Bold%Please download %Yellow%ffprobe.exe.%White% and extract it to the same folder with this script.
+  echo   ^>   %Red%Error^! %White%File %Yellow%ffprobe.exe %White%not found!
+  echo       %Bold%Please download %Yellow%ffprobe.exe%White% and extract it to the same folder with this script.
   echo       %Bold%Please press any key to continue..%White%
   pause >nul
   cd bin
   call :dl-ff
   cd ..
   timeout 5 >nul
+  echo.
+  echo.
   echo       %Bold%Please press any key to continue..%White%
   pause >nul
   cls
