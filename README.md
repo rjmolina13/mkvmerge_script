@@ -136,8 +136,9 @@ mkvmerge_script
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Implement wget auto download for prereqs
-- [ ] Implement auto extraction of downloaded prereqs
+- [x] Implement wget auto download for prereqs
+- [x] Implement auto extraction of downloaded prereqs
+- [ ] Make python version -- to achieve cross-OS compatibility
 
 See the [open issues](https://github.com/rjmolina13/mkvmerge_script/issues) for a full list of proposed features (and known issues).
 
