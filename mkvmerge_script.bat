@@ -1,11 +1,17 @@
 %@echo off
-::- Changelog: (05/02/2023)
+::- Changelog: (04/04/2024)
 ::+ 4.5 - added custom episode
 ::+ 5.0 - added ffprobe and mkvmerge checking
 ::+ 5.1 - reimplemented vbs playback
 ::+ 5.2 - added bin folder checking
 ::+ 5.3 - reduced lines, calls :header instead of printing header mutiple lines
 ::+ 5.4 - colorized current show being processed
+::+ 5.5 - add auto download dependencies
+::+ 5.6 - add auto extract
+::+ 5.8 - add auto 7zip detection & download
+::+ 5.9 - improvements
+::+ 6.0 - batch script final ver
+
 
 :: Check play sound vbs if exists else creates
 if not exist "%~dp0mkvmerge_script-play.vbs" (
@@ -32,7 +38,8 @@ if not exist "%~dp0bin\" (
 :init
 :: Enable rendering of ASCII symbols
 chcp 65001 >NUL
-set ver=v5.4
+set ver=v6.0
+
 :: Define ASCII Colors
 set nhcolor=
 set Green=%nhcolor%[32m
@@ -45,22 +52,46 @@ set Yellow=%nhcolor%[33m
 set Lightgray=%nhcolor%[38m
 set Bold=%nhcolor%[1m
 
+:: Real start
+:start
+set season=S01
+set lang=kor
+set drama=KDrama
+set type=drama
+set /a count = 0
+
+:: Variables, url, version, filename
+set sz="C:\Program Files\7-Zip\7z.exe"
+call :szdl
+set "mkvtoolnix_url=https://mkvtoolnix.download/windows/releases/"
+set "ffmpeg_url=https://www.gyan.dev/ffmpeg/builds/"
+set "mkvtoolnix_version=83.0"
+@REM set "ffmpeg_version=6.1"
+set "mkvtoolnix_dlurl=%mkvtoolnix_url%%mkvtoolnix_version%/mkvtoolnix-64-bit-%mkvtoolnix_version%.7z"
+@REM set "ffmpeg_dlurl=%ffmpeg_url%ffmpeg-%ffmpeg_version%.tar.gz"
+set "ffmpeg_dlurl=%ffmpeg_url%ffmpeg-git-essentials.7z"
+set "mkvtoolnix-file=mkvtoolnix-64-bit-%mkvtoolnix_version%.7z"
+set "ffmpeg-file=ffmpeg-git-essentials.7z"
+
 call :header
 set "mkvmerge="
-for /f "delims=" %%i in ('dir /s /b /a-d "mkvmerge*.exe" 2^>nul') do set "mkvmerge=%%i" & goto :mkvmbreak
+if not exist "%~dp0bin\" (
+    mkdir "%~dp0bin"
+)
+for /f "delims=" %%i in ('dir /s /b /a-d ".\bin\mkvmerge*.exe" 2^>nul') do set "mkvmerge=%%i" & goto :mkvmbreak
 
 :: :mkvmbreak and :ffbreak checks if dependencies exists else prompts user to download
 :mkvmbreak
 if "%mkvmerge%" == "" (
   echo.
   echo   ^>   %Red%Error^^! %White%File %Yellow%mkvmerge*.exe %White%not found!
-  echo       %Bold%Please download %Yellow%mkvmerge.exe.%White% and extract it to the same folder with this script.
+  echo       %Bold%Please download %Yellow%mkvmerge.exe %White% and extract it to the same folder with this script.
   echo       %Bold%Please press any key to continue..%White%
   pause >nul
-  start "" explorer %~dp0
-  start https://mkvtoolnix.download/downloads.html#windows
+  cd bin
+  call :dl-mkv
+  cd ..
   timeout 5 >nul
-  exit /b
 ) else (
   rem mkvmerge found!
 )
@@ -72,28 +103,22 @@ for /f "delims=" %%i in ('dir /s /b /a-d "ffprobe*.exe" 2^>nul') do set "ffprobe
 :ffbreak
 if "%ffprobe%" == "" (
   echo.
-  echo   ^>   %Red%Error^^! %White%File %Yellow%ffprobe*.exe %White%not found!
+  echo   ^>   %Red%Error^! %White%File %Yellow%ffprobe*.exe %White%not found!
   echo       %Bold%Please download %Yellow%ffprobe.exe.%White% and extract it to the same folder with this script.
   echo       %Bold%Please press any key to continue..%White%
   pause >nul
-  start "" explorer %~dp0
-  start https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-essentials.7z
+  cd bin
+  call :dl-ff
+  cd ..
   timeout 5 >nul
-  exit /b
+  echo       %Bold%Please press any key to continue..%White%
   pause >nul
+  cls
 ) else (
   rem ffprobe found!
 )
 cls
 
-
-:: Real start
-:start
-set season=S01
-set lang=kor
-set drama=KDrama
-set type=drama
-set /a count = 0
 
 :: Main manu
 :main
@@ -413,7 +438,7 @@ if "%season%"=="B" (set season=S01 && cls && goto main)
 echo %White%'
 cls && goto main
 
-
+:: Header, display program text on top of the script
 :header
 echo.
 echo.
@@ -424,3 +449,69 @@ echo            %Green%mkvmerge%White%_%Lightgray%script %Red%%ver%%White%  [mkv
 echo                    %Cyan%@rjmolina13 - ronanj.site/gh%White%
 echo ╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍  
 goto :eof
+
+
+:: Downloader script / first block
+:dl-ff
+set "filename=%ffmpeg-file%"
+set "url=%ffmpeg_dlurl%"
+set "exe=ffprobe.exe"
+call :download_and_extract
+for /f %%f in ('dir /B /T:C ffmpeg-*') do set "file=%%f" >nul
+move "%file%\bin\%exe%" "%~dp0bin" >nul
+rd /S /Q "%file%" >nul
+echo       %Bold%Downloaded and extracted %Yellow%"%filename%"%White%.
+goto :EOF
+
+:: Downloader script / second block
+:dl-mkv
+set "filename=%mkvtoolnix-file%"
+set "url=%mkvtoolnix_dlurl%"
+set "exe=mkvmerge.exe"
+call :download_and_extract
+move "mkvtoolnix\%exe%" "%~dp0bin" >nul
+rd /S /Q mkvtoolnix >nul
+echo       %Bold%Downloaded and extracted %Yellow%"%filename%"%White%.
+goto :EOF
+
+:: =====================================
+:: Function to download and extract
+:download_and_extract
+echo       %Bold%Now downloading %Yellow%"%filename%"%White%...
+powershell -Command "(New-Object System.Net.WebClient).DownloadFile('%url%', '%filename%')"
+if %errorlevel% neq 0 (
+    echo Failed to download "%filename%"
+    goto :EOF
+)
+@REM echo Extracting "%filename%"...
+%sz% x -o. "%filename%" -r -y %exe% >nul
+del "%filename%" >nul
+goto :EOF
+
+:: Function to download 7zip if it isn't installed
+:szdl
+if not exist %sz% (
+    echo 7-Zip not found. Downloading and installing...
+
+    REM Define download URL
+    set "download_url=https://www.7-zip.org/a/7z2403-x64.exe"
+
+    REM Define download location
+    set "download_location=%TEMP%\7zInstaller.exe"
+
+    REM Download 7-Zip installer using PowerShell
+    powershell -Command "(New-Object System.Net.WebClient).DownloadFile('%download_url%', '%download_location%')"
+
+    REM Install 7-Zip silently
+    start /wait "" "%download_location%" /S
+
+    REM Check if installation was successful
+    if not exist %sz% (
+        echo Failed to install 7-Zip.
+        exit /b 1
+    )
+
+    REM Clean up downloaded installer
+    del "%download_location%"
+)
+goto :EOF
