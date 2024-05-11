@@ -1,5 +1,5 @@
 %@echo off
-::- Changelog: (04/04/2024)
+::- Changelog: (05/12/2024)
 ::+ 4.5 - added custom episode
 ::+ 5.0 - added ffprobe and mkvmerge checking
 ::+ 5.1 - reimplemented vbs playback
@@ -7,13 +7,18 @@
 ::+ 5.3 - reduced lines, calls :header instead of printing header mutiple lines
 ::+ 5.4 - colorized current show being processed
 ::+ 5.5 - add auto download dependencies
-::+ 5.6 - add auto extract
+::+ 5.6-7 - add auto extract
 ::+ 5.8 - add auto 7zip detection & download
 ::+ 5.9 - improvements
 ::+ 6.0 - batch script final ver
 ::+ 6.1 - fixes
+::+ 6.2-4 - fixed 7zip detection and fixes
+::+ 6.5 - removed subtitle watermark (cc: @lionavila)
+::+ 6.6-8 - added custom font for attatching via subtitles, custom and current dir font
+::+ 6.9 - fixed custom font and cd custom font detection
+::+ 7.0 - added custom subtitle track tag, added secret font dl menu, improved code readability and organization, added script source custom font
 
-:: Check play sound vbs if exists else creates
+:: Check play sound .vbs if exists else creates
 if not exist "%~dp0mkvmerge_script-play.vbs" (
   echo Dim oPlayer > "%~dp0mkvmerge_script-play.vbs"
   echo Set oPlayer = CreateObject("WMPlayer.OCX"^) >> "%~dp0mkvmerge_script-play.vbs"
@@ -38,8 +43,9 @@ if not exist "%~dp0bin\" (
 :init
 :: Enable rendering of ASCII symbols
 chcp 65001 >NUL
-set ver=v6.1
 
+:: Variables Block
+set ver=v7.0
 :: Define ASCII Colors
 set nhcolor=
 set Green=%nhcolor%[32m
@@ -52,16 +58,18 @@ set Yellow=%nhcolor%[33m
 set Lightgray=%nhcolor%[38m
 set Bold=%nhcolor%[1m
 
-:: Real start
+:: Actual start of the script
 :start
+set csr=no
+set subname=
 set season=S01
 set lang=kor
 set drama=KDrama
 set type=drama
 set /a count = 0
-title mkvmerge_script %ver%  [mkv+ass / %drama%] - %Season% %count%
+title mkvmerge_script %ver%  [mkv+ass / %drama%] - %Season%
 
-:: Variables, url, version, filename
+:: Dependencies variables, url, version, filename
 set sz="C:\Program Files\7-Zip\7z.exe"
 call :szdl
 set "mkvtoolnix_url=https://mkvtoolnix.download/windows/releases/"
@@ -81,22 +89,19 @@ if not exist "%~dp0bin\" (
 )
 for /f "delims=" %%i in ('dir /s /b /a-d ".\bin\mkvmerge*.exe" 2^>nul') do set "mkvmerge=%%i" & goto :mkvmbreak
 
-:: :mkvmbreak and :ffbreak checks if dependencies exists else prompts user to download
+:: :mkvmbreak and :ffbreak checks if dependencies exists else auto downloads it
 :mkvmbreak
 if "%mkvmerge%" == "" (
   echo.
-  echo   ^>   %Red%Error^! %White%File %Yellow%mkvmerge.exe %White%not found!
-  echo       %Bold%Please download %Yellow%mkvmerge.exe %White% and extract it to the same folder with this script.
-  echo       %Bold%Please press any key to continue..%White%
-  pause >nul
+  echo   ^>   %Red%Error^! %White%File %Yellow%"mkvmerge.exe" %White%not found!
+  echo       %Bold%Will automatically download and extract %Yellow%"mkvmerge.exe"%White%...
+  timeout 5 >nul
   cd bin
   call :dl-mkv
   cd ..
   timeout 5 >nul
-) else (
-  rem mkvmerge found!
+  cls
 )
-
 
 set "ffprobe="
 for /f "delims=" %%i in ('dir /s /b /a-d "ffprobe*.exe" 2^>nul') do set "ffprobe=%%i" & goto :ffbreak
@@ -104,28 +109,24 @@ for /f "delims=" %%i in ('dir /s /b /a-d "ffprobe*.exe" 2^>nul') do set "ffprobe
 :ffbreak
 if "%ffprobe%" == "" (
   echo.
-  echo   ^>   %Red%Error^! %White%File %Yellow%ffprobe.exe %White%not found!
-  echo       %Bold%Please download %Yellow%ffprobe.exe%White% and extract it to the same folder with this script.
-  echo       %Bold%Please press any key to continue..%White%
-  pause >nul
+  echo   ^>   %Red%Error^! %White%File %Yellow%"ffprobe.exe" %White%not found!
+  echo       %Bold%Will automatically download and extract %Yellow%"ffprobe.exe"%White%...
+  timeout 5 >nul
   cd bin
   call :dl-ff
   cd ..
   timeout 5 >nul
   echo.
   echo.
-  echo       %Bold%Please press any key to continue..%White%
+  echo       %Bold%Please press any key to continue...%White%
   pause >nul
   cls
-) else (
-  rem ffprobe found!
+  if not defined _relaunched (set _relaunched=1 & start "" cmd /c "%~dpnx0" %* & exit)
 )
 cls
 
-
-:: Main manu
+:: Main Menu
 :main
-::=================================================================================
 title mkvmerge_script %ver%  [mkv+ass / %drama%] - %Season% %count%
 if "%type%"=="movie" (title mkvmerge_script %ver%  [mkv+ass / %drama%])
 
@@ -151,55 +152,52 @@ echo                                                                            
 echo                                                                                  ║         S:custom    0:default     ║
 set "spaces1=                                                "
 set "timestamp1='    Enter %Yellow%%drama%%White% Folder Path with"
-set "message1=         ║         z: custom Ep   %Red%x:Exit%White%     ║"
+set "message1=         ║      %Yellow%ssf:%White% script source font      ║"
 set "line1=%timestamp1%%spaces1%"
 set "line1=%line1:~0,80%  %message1%
+echo                                                                                  ║         z: custom Ep   %Red%x: Exit%White%    ║
+echo                                                                                  ║ %Yellow%sr:%White% cust. font %Yellow%csr:%White% cust. font/cd ║
+echo                                                                                  ║     %Yellow%sb:%White% custom sub track tag      ║
 echo %line1%
-REM echo '    Enter %drama% Folder Path with                                               ╚═══════════════════════════════════╝
 echo '    *.mkv and *.ass ready to be muxed:                                          ╚═══════════════════════════════════╝
 set /p loc="'     %Yellow%> "
-if "%loc%"=="exit" (exit) 
-if "%loc%"=="EXIT" (exit) 
+if /i "%loc%"=="exit" (exit) 
+if /i "%loc%"=="x" (exit /b)
+if /i "%loc%"=="1" (set "lang=kor" && set "drama=KDrama" && cls && goto main)
+if /i "%loc%"=="2" (set "lang=zh-CN" && set "drama=CDrama" && cls && goto main)
+if /i "%loc%"=="3" (set "lang=zh-TW" && set "drama=TWDrama" && cls && goto main)
+if /i "%loc%"=="4" (set "lang=jpn" && set "drama=JDrama" && cls && goto main)
+if /i "%loc%"=="5" (set "lang=th" && set "drama=Thai Drama" && cls && goto main)
+if /i "%loc%"=="6" (set "lang=en" && set "drama=TV Show" && cls && goto main)
+if /i "%loc%"=="7" (set "lang=fil" && set "drama=Fil TV" && cls && goto main)
+if /i "%loc%"=="8" (set "lang=kor" && set "drama=KVariety" && set "type=variety"  && cls && goto main)
 
-if "%loc%"=="x" (exit)
-if "%loc%"=="X" (exit)
-if "%loc%"=="1" (echo %white%. && set "lang=kor" && set "drama=KDrama" && cls && goto main)
-if "%loc%"=="2" (echo %white%. && set "lang=zh-CN" && set "drama=CDrama" && cls && goto main)
-if "%loc%"=="3" (echo %white%. && set "lang=zh-TW" && set "drama=TWDrama" && cls && goto main)
-if "%loc%"=="4" (echo %white%. && set "lang=jpn" && set "drama=JDrama" && cls && goto main)
-if "%loc%"=="5" (echo %white%. && set "lang=th" && set "drama=Thai Drama" && cls && goto main)
-if "%loc%"=="6" (echo %white%. && set "lang=en" && set "drama=TV Show" && cls && goto main)
-if "%loc%"=="7" (echo %white%. && set "lang=fil" && set "drama=Fil TV Show" && cls && goto main)
-if "%loc%"=="8" (echo %white%. && set "lang=kor" && set "drama=KVariety" && set "type=variety"  && cls && goto main)
+if /i "%loc%"=="a" (set "lang=kor" && set "drama=KMovie" && set "type=movie" && cls && goto main)
+if /i "%loc%"=="b" (set "lang=zh-CN" && set "drama=CMovie" && set "type=movie" && cls && goto main)
+if /i "%loc%"=="c" (set "lang=jpn" && set "drama=JMovie" && set "type=movie" && cls && goto main)
+if /i "%loc%"=="d" (set "lang=th" && set "drama=Thai Movie" && set "type=movie" && cls && goto main)
+if /i "%loc%"=="e" (set "lang=en" && set "drama=Eng Movie" && set "type=movie" && cls && goto main)
+if /i "%loc%"=="f" (set "lang=fil" && set "drama=Fil Movie" && set "type=movie" && cls && goto main)
 
-if "%loc%"=="a" (echo %white%. && set "lang=kor" && set "drama=KMovie" && set "type=movie" && cls && goto main)
-if "%loc%"=="b" (echo %white%. && set "lang=zh-CN" && set "drama=CMovie" && set "type=movie" && cls && goto main)
-if "%loc%"=="c" (echo %white%. && set "lang=jpn" && set "drama=JMovie" && set "type=movie" && cls && goto main)
-if "%loc%"=="d" (echo %white%. && set "lang=th" && set "drama=Thai Movie" && set "type=movie" && cls && goto main)
-if "%loc%"=="e" (echo %white%. && set "lang=en" && set "drama=Eng Movie" && set "type=movie" && cls && goto main)
-if "%loc%"=="f" (echo %white%. && set "lang=fil" && set "drama=Fil Movie" && set "type=movie" && cls && goto main)
+if /i "%loc%"=="0" (set "lang=kor" && set "drama=KDrama" && set "season=S01" && cls && goto start)
+if /i "%loc%"=="s1" (set "season=S01" && cls && goto main)
+if /i "%loc%"=="s2" (set "season=S02" && cls && goto main)
+if /i "%loc%"=="s3" (set "season=S03" && cls && goto main)
+if /i "%loc%"=="s4" (set "season=S04" && cls && goto main)
+if /i "%loc%"=="s5" (set "season=S05" && cls && goto main)
+if /i "%loc%"=="s" (goto s)
+if /i "%loc%"=="z" (goto z)
+if /i "%loc%"=="sr" (goto sr)
+if /i "%loc%"=="csr" (goto csr)
+if /i "%loc%"=="sb" (goto csubname)
+if /i "%loc%"=="dl" (goto fontextract)
+if /i "%loc%"=="ssf" (goto ssf)
 
-if "%loc%"=="0" (echo %white%. && set "lang=kor" && set "drama=KDrama" && set "season=S01" && cls && goto start)
-if "%loc%"=="s1" (echo %white%. && set "season=S01" && cls && goto main)
-if "%loc%"=="S1" (echo %white%. && set "season=S01" && cls && goto main)
-if "%loc%"=="s2" (echo %white%. && set "season=S02" && cls && goto main)
-if "%loc%"=="S2" (echo %white%. && set "season=S02" && cls && goto main)
-if "%loc%"=="s3" (echo %white%. && set "season=S03" && cls && goto main)
-if "%loc%"=="S3" (echo %white%. && set "season=S03" && cls && goto main)
-if "%loc%"=="s4" (echo %white%. && set "season=S04" && cls && goto main)
-if "%loc%"=="S4" (echo %white%. && set "season=S04" && cls && goto main)
-if "%loc%"=="s5" (echo %white%. && set "season=S05" && cls && goto main)
-if "%loc%"=="S5" (echo %white%. && set "season=S05" && cls && goto main)
-if "%loc%"=="s" (echo %white%. && goto s)
-if "%loc%"=="S" (echo %white%. && goto s)
-if "%loc%"=="z" (echo %white%. && goto z)
-if "%loc%"=="Z" (echo %white%. && goto z)
 cls
 :season
 if "%type%"=="movie" (goto movie)
 if "%type%"=="variety" (goto variety)
-call :header
-echo.
+call :header && echo.
 pushd "%loc%"
 if exist "*SP*" md sp && move "*SP*" sp
 echo.
@@ -213,21 +211,89 @@ echo %White%'
 if exist "*.srt" md srt && move "*.srt" srt
 if exist "*.srt" move "*.srt" srt
 cls
-for %%A IN (*.mkv) do (
-  set /a count += 1
-  echo.
-  echo %Yellow%"%title% - %season%E0!count!"%White%
-echo =====================================
-title mkvmerge_script %ver%   [mkv+ass / %drama%]    l     Muxing...  "%%~nA.mkv"    l     "%title% - %season%E0!count!"
-<nul set /p ="Video resolution is: "
-%ffprobe% -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 "%%~nA.mkv"
-%mkvmerge% -o "out\%%~nA.mkv" --title "%title% - %season%E0!count!" --no-subtitles --no-attachments --track-name "0:" --language "0:%lang%" --track-name "1:" --language "1:%lang%" "%%~A" --track-name "0:English [Rubyj]" --language "0:eng" --forced-track "0:yes" --default-track "0:yes" "%%~nA.ass" --no-track-tags --no-global-tags
-echo.
-echo.
+
+setlocal enabledelayedexpansion
+set "found=false"
+
+if "%csr%"=="yes" (
+    for %%i in ("%loc%\*.otf" "%loc%\*.ttf") do (
+        set "font=%%i" && (
+            if defined font (
+                echo.
+                echo %Green%Found font file^^!: %Yellow%"!font!"%White%
+                set "found=true"
+                echo.
+            )
+        )
+    )
+
+    if "!found!"=="false" (
+        echo.
+        echo %Red%No font files %Yellow%"*.otf" %Red%or %Yellow%"*.ttf" %Red%found in %White%"!loc!"%Red%.%White%
+        echo If you enabled %Yellow%"csr"%White% or %Yellow%"Attach font from current directory"%White%,
+        echo but no font file is present, the script will continue without the font file.
+        echo.
+        set "csr=no"
+        timeout 5 >nul
+    )
+) else (
+    rem Proceeding with the script because %csr% is not "yes"
 )
+
+if "%csr%"=="yes" if defined font (
+    call :csryes
+    goto finished
+)
+
+if "%csr%"=="no" if defined font (
+    echo %Green%Font file specified is: %Yellow%"!font!"%White% && echo. && call :csryes
+    goto finished
+)
+
+if "%csr%"=="no" if not defined font (
+    call :csrno
+    goto finished
+)
+
+:csryes
+for %%A IN (*.mkv) do (
+    set /a count += 1
+    echo.
+    echo %Yellow%"%title% - %season%E0!count!"%White%
+    echo =============================================
+    title mkvmerge_script %ver% [mkv+ass / %drama%]   l   Muxing...  "%%~nA.mkv"    l     "%title% - %season%E0!count!"
+    <nul set /p ="Video resolution is: %Cyan%"
+    %ffprobe% -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 "%%~nA.mkv" & set /p "=%White%" <nul
+    if not "%subname%"=="" (
+        %mkvmerge% -o "out\%%~nA.mkv" --title "%title% - %season%E0!count!" --no-subtitles --no-attachments --track-name "0:" --language "0:%lang%" --track-name "1:" --language "1:%lang%" "%%~A" --track-name "0:English [%subname%]" --language "0:eng" --forced-track "0:yes" --default-track "0:yes" "%%~nA.ass" --attach-file "%font%" --no-track-tags --no-global-tags
+    ) else (
+        %mkvmerge% -o "out\%%~nA.mkv" --title "%title% - %season%E0!count!" --no-subtitles --no-attachments --track-name "0:" --language "0:%lang%" --track-name "1:" --language "1:%lang%" "%%~A" --track-name "0:English" --language "0:eng" --forced-track "0:yes" --default-track "0:yes" "%%~nA.ass" --attach-file "%font%" --no-track-tags --no-global-tags
+    )
+)
+goto :eof
+
+:csrno
+for %%A IN (*.mkv) do (
+    set /a count += 1
+    echo.
+    echo %Yellow%"%title% - %season%E0!count!"%White%
+    echo =============================================
+    title mkvmerge_script %ver% [mkv+ass / %drama%]   l   Muxing...  "%%~nA.mkv"    l     "%title% - %season%E0!count!"
+    <nul set /p ="Video resolution is: %Cyan%"
+    %ffprobe% -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 "%%~nA.mkv" & set /p "=%White%" <nul
+    if not "%subname%"=="" (
+      %mkvmerge% -o "out\%%~nA.mkv" --title "%title% - %season%E0!count!" --no-subtitles --no-attachments --track-name "0:" --language "0:%lang%" --track-name "1:" --language "1:%lang%" "%%~A" --track-name "0:English [%subname%]" --language "0:eng" --forced-track "0:yes" --default-track "0:yes" "%%~nA.ass" --no-track-tags --no-global-tags
+    ) else (
+        %mkvmerge% -o "out\%%~nA.mkv" --title "%title% - %season%E0!count!" --no-subtitles --no-attachments --track-name "0:" --language "0:%lang%" --track-name "1:" --language "1:%lang%" "%%~A" --track-name "0:English" --language "0:eng" --forced-track "0:yes" --default-track "0:yes" "%%~nA.ass" --no-track-tags --no-global-tags
+    )
+    echo. && echo.
+)
+goto :eof
+
+:finished
 echo.
-if exist sp (goto wewsp) else goto ending
-:wewsp
+if exist sp (goto spyes) else goto ending
+:spyes
 cd sp
 for %%A IN (*.mkv) do (
   set /a count = 0
@@ -235,34 +301,31 @@ for %%A IN (*.mkv) do (
   set /a count += 1
   echo.
   echo %Yellow%"%title% - %season%SP0!count!"%White%
-echo =====================================
-title mkvmerge_script %ver%   [mkv+ass / %drama%]    l     Muxing...  "%%~nA.mkv"    l     "%title% - %season%SP0!count!"
+echo =============================================
+title mkvmerge_script %ver% [mkv+ass / %drama%]   l   Muxing...  "%%~nA.mkv"    l     "%title% - %season%SP0!count!"
 <nul set /p ="Video resolution is: "
 %ffprobe% -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 "%%~nA.mkv"
-%mkvmerge% -o "out\%%~nA.mkv" --title "%title% - %season%SP0!count!" --no-subtitles --no-attachments --track-name "0:" --language "0:%lang%" --track-name "1:" --language "1:%lang%" "%%~A" --track-name "0:English [Rubyj]" --language "0:eng" --forced-track "0:yes" --default-track "0:yes" "%%~nA.ass" --no-track-tags --no-global-tags
-echo =====================================
+%mkvmerge% -o "out\%%~nA.mkv" --title "%title% - %season%SP0!count!" --no-subtitles --no-attachments --track-name "0:" --language "0:%lang%" --track-name "1:" --language "1:%lang%" "%%~A" --track-name "0:English" --language "0:eng" --forced-track "0:yes" --default-track "0:yes" "%%~nA.ass" --no-track-tags --no-global-tags
+echo =============================================
 )
 cd..
 :ending
-echo.
-echo.
+echo. && echo.
 cscript //nologo "%~dp0mkvmerge_script-play.vbs"
-echo ```````````````````````````````````````````````````````````````
-title mkvmerge_script %ver%   [mkv+ass / %drama%]   l    Done muxing^!
-echo Finished muxing!
+echo =============================================
+title mkvmerge_script %ver% [mkv+ass / %drama%]   l   Done muxing^^!
+echo %Green%Finished muxing^^!%White%
 echo.
-echo Would you like to move finished muxed files to root dir?
-CHOICE  /C:12 /N /M "1) Yes // 2) No: "
-IF ERRORLEVEL 2 GOTO wewno
-IF ERRORLEVEL 1 GOTO wewyes
+CHOICE  /C:yn /N /M "Would you like to move finished muxed files to root directory? (y/n): "
+IF ERRORLEVEL 2 GOTO moveno
+IF ERRORLEVEL 1 GOTO moveyes
 echo.
 
-:wewno
-pause
-exit
+:moveno
+pause && exit
 
 
-:wewyes
+:moveyes
 echo.
 md empty
 robocopy empty "%cd%" *.mkv /njs /njh /nc /purge
@@ -284,8 +347,7 @@ pause
 exit
 
 :movie
-call :header
-echo.
+call :header && echo.
 pushd "%loc%"
 echo.
 echo %White%'    Current directory is: 
@@ -301,21 +363,18 @@ echo %loc%
 for %%A IN (*.mkv) do (
   echo.
   echo %Yellow%"%title%"%White%
-echo =====================================
+echo =============================================
 title mkvmerge_script %ver%   [mkv+ass / %drama%]    l     Muxing...  "%%~nA.mkv"    l     "%title%"
 <nul set /p ="Video resolution is: "
 %ffprobe% -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 "%%~nA.mkv"
-%mkvmerge% -o "out\%%~nA.mkv" --title "%title%" --no-subtitles --no-attachments --audio-tracks "1" --track-name "0:" --language "0:%lang%" --track-name "1:" --language "1:%lang%" "%%~A" --track-name "0:English [Rubyj]" --language "0:eng" --forced-track "0:yes" --default-track "0:yes" "%%~nA.ass" --no-track-tags --no-global-tags
-echo.
-echo.
+%mkvmerge% -o "out\%%~nA.mkv" --title "%title%" --no-subtitles --no-attachments --audio-tracks "1" --track-name "0:" --language "0:%lang%" --track-name "1:" --language "1:%lang%" "%%~A" --track-name "0:English" --language "0:eng" --forced-track "0:yes" --default-track "0:yes" "%%~nA.ass" --no-track-tags --no-global-tags
+echo. && echo.
 )
-echo.
-echo.
+echo. && echo.
 goto :ending
 
 :variety
-call :header
-echo.
+call :header && echo.
 pushd "%loc%"
 echo.
 echo %White%'    Current directory is: 
@@ -342,17 +401,16 @@ for %%A IN (*.mkv) do (
   set /a count += 1
   echo.
   echo %Yellow%"%title% - %season%E0!count!"%White%
-echo =====================================
+echo =============================================
 title mkvmerge_script %ver%   [mkv+ass / %drama%]    l     Muxing...  "%%~nA.mkv"    l     "%title% - %season%E0!count!"
 <nul set /p ="Video resolution is: "
 %ffprobe% -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 "%%~nA.mkv"
-%mkvmerge% -o "out\%%~nA.mkv" --title "%title% - %season%E0!count!" --no-subtitles --no-attachments --track-name "0:" --language "0:%lang%" --track-name "1:" --language "1:%lang%" "%%~A" --track-name "0:English [Rubyj]" --language "0:eng" --forced-track "0:yes" --default-track "0:yes" "%%~nA.ass" --no-track-tags --no-global-tags
-echo.
-echo.
+%mkvmerge% -o "out\%%~nA.mkv" --title "%title% - %season%E0!count!" --no-subtitles --no-attachments --track-name "0:" --language "0:%lang%" --track-name "1:" --language "1:%lang%" "%%~A" --track-name "0:English" --language "0:eng" --forced-track "0:yes" --default-track "0:yes" "%%~nA.ass" --no-track-tags --no-global-tags
+echo. && echo.
 )
 echo.
-if exist sp (goto wewsp) else goto ending
-:wewsp
+if exist sp (goto spyes) else goto ending
+:spyes
 cd sp
 for %%A IN (*.mkv) do (
   set /a count = 0
@@ -360,12 +418,12 @@ for %%A IN (*.mkv) do (
   set /a count += 1
   echo.
   echo %Yellow%"%title% - %season%SP0!count!"%White%
-echo =====================================
+echo =============================================
 title mkvmerge_script %ver%   [mkv+ass / %drama%]    l     Muxing...  "%%~nA.mkv"    l     "%title% - %season%SP0!count!"
 <nul set /p ="Video resolution is: "
 %ffprobe% -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 "%%~nA.mkv"
-%mkvmerge% -o "out\%%~nA.mkv" --title "%title% - %season%SP0!count!" --no-subtitles --no-attachments --track-name "0:" --language "0:%lang%" --track-name "1:" --language "1:%lang%" "%%~A" --track-name "0:English [Rubyj]" --language "0:eng" --forced-track "0:yes" --default-track "0:yes" "%%~nA.ass" --no-track-tags --no-global-tags
-echo =====================================
+%mkvmerge% -o "out\%%~nA.mkv" --title "%title% - %season%SP0!count!" --no-subtitles --no-attachments --track-name "0:" --language "0:%lang%" --track-name "1:" --language "1:%lang%" "%%~A" --track-name "0:English" --language "0:eng" --forced-track "0:yes" --default-track "0:yes" "%%~nA.ass" --no-track-tags --no-global-tags
+echo =============================================
 )
 cd..
 goto ending
@@ -381,17 +439,16 @@ for %%A IN (*.mkv) do (
   set /a count += 1
   echo.
   echo %Yellow%"%title% - %season%E0!count!"%White%
-echo =====================================
+echo =============================================
 title mkvmerge_script %ver%   [mkv+ass / %drama%]    l     Muxing...  "%%~nA.mkv"    l     "%title% - %season%E0!count!"
 <nul set /p ="Video resolution is: "
 %ffprobe% -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 "%%~nA.mkv"
-%mkvmerge% -o "out\%%~nA.mkv" --title "%title% - %season%E0!count!" --no-subtitles --no-attachments --track-name "0:" --language "0:%lang%" --track-name "1:" --language "1:%lang%" "%%~A" --track-name "0:English [Rubyj]" --language "0:eng" --forced-track "0:yes" --default-track "0:yes" "%%~nA.ass" --no-track-tags --no-global-tags
-echo.
-echo.
+%mkvmerge% -o "out\%%~nA.mkv" --title "%title% - %season%E0!count!" --no-subtitles --no-attachments --track-name "0:" --language "0:%lang%" --track-name "1:" --language "1:%lang%" "%%~A" --track-name "0:English" --language "0:eng" --forced-track "0:yes" --default-track "0:yes" "%%~nA.ass" --no-track-tags --no-global-tags
+echo. && echo.
 )
 echo.
-if exist sp (goto wewsp) else goto ending
-:wewsp
+if exist sp (goto spyes) else goto ending
+:spyes
 cd sp
 set /a count = 0
 for %%A IN (*.mkv) do (
@@ -399,22 +456,19 @@ for %%A IN (*.mkv) do (
   set /a count += 1
   echo.
   echo %Yellow%"%title% - %season%SP0!count!"%White%
-echo =====================================
+echo =============================================
 title mkvmerge_script %ver%   [mkv+ass / %drama%]    l     Muxing...  "%%~nA.mkv"    l     "%title% - %season%SP0!count!"
 <nul set /p ="Video resolution is: "
 %ffprobe% -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 "%%~nA.mkv"
-%mkvmerge% -o "out\%%~nA.mkv" --title "%title% - %season%SP0!count!" --no-subtitles --no-attachments --track-name "0:" --language "0:%lang%" --track-name "1:" --language "1:%lang%" "%%~A" --track-name "0:English [Rubyj]" --language "0:eng" --forced-track "0:yes" --default-track "0:yes" "%%~nA.ass" --no-track-tags --no-global-tags
-echo =====================================
+%mkvmerge% -o "out\%%~nA.mkv" --title "%title% - %season%SP0!count!" --no-subtitles --no-attachments --track-name "0:" --language "0:%lang%" --track-name "1:" --language "1:%lang%" "%%~A" --track-name "0:English" --language "0:eng" --forced-track "0:yes" --default-track "0:yes" "%%~nA.ass" --no-track-tags --no-global-tags
+echo =============================================
 )
 cd..
 goto ending
 
 
 :z
-cls
-call :header
-echo.
-echo.
+cls && call :header && echo. && echo.
 echo %White%'    Current Episode: %Yellow% !count! %White%
 echo.
 echo '    Input Custom Episode Number:
@@ -424,14 +478,10 @@ if "!count!"=="B" (cls && goto main)
 echo.
 echo '    Episode is set to: %Yellow%!count!%White%
 echo %White%'
-timeout 3 >nul
-cls && goto main
+timeout 3 >nul && cls && goto main
 
 :s
-cls
-call :header
-echo.
-echo.
+cls && call :header && echo. && echo.
 echo %White%'    Current Season: %Yellow% %Season% %White%
 echo.
 echo '    Input Custom Season Number:
@@ -441,12 +491,55 @@ if "%season%"=="B" (set season=S01 && cls && goto main)
 echo %White%'
 cls && goto main
 
+:sr
+cls && call :header && echo. && echo.
+echo %White%'    %Yellow%Attach custom font to be used by subtitles.%White%
+echo %White%'    %Yellow%Font file path must exclude "quotation marks".%White%
+echo.
+set /p font="'    Font location: "
+if "%font%"=="b" (cls && goto main)
+if "%font%"=="B" (cls && goto main)
+echo.
+echo '    Custom font is: %Yellow%"%font%"%White%
+echo. && timeout 3 >nul && cls && goto main
+
+
+:csr
+cls && call :header && echo. && echo.
+echo %White%'    %Yellow%This mode will attach custom font in the current %White%
+echo %White%'    %Yellow%directory to be used by subtitles.%White%
+echo.
+set csr=yes
+echo. && echo. && timeout 3 >nul && cls && goto main
+
+:ssf
+cls && call :header && echo. && echo.
+@REM goto fontextract
+echo %White%'    %Yellow%This mode will attach custom font in the current %White%
+echo %White%'    %Yellow%script directory to be used by subtitles.%White%
+echo.
+for %%i in ("%~dp0*.otf" "%~dp0*.ttf") do (set "font=%%i")
+echo. && echo. && timeout 3 >nul && cls && goto main
+
+:csubname
+cls && call :header && echo. && echo.
+echo %White%'    When you select the subtitle track inside the video
+echo %White%'    player, by default it shows as %Yellow%"[English]",%White%
+echo %White%'    this option allows you to set a custom subtitle%White%
+echo %White%'    track name after %Yellow%"[English]"%White%, your input will
+echo %White%'    be shown after the language.
+echo.
+set /p subname="'    Custom Subtitle Track Name: %Yellow%"
+if "%subname%!"=="b" (cls && goto main)
+if "%subname%"=="B" (cls && goto main)
+echo. && echo.
+echo '    %White%Custom Subtitle Track Name is: %Yellow%"%subname%"%White%,
+echo '    will show as: %Yellow%"English [%subname%]"%White%.
+echo. && timeout 8 >nul && cls && goto main
+
 :: Header, display program text on top of the script
 :header
-echo.
-echo.
-echo.
-echo.
+echo. && echo. && echo. && echo.
 echo %White% ╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍
 echo            %Green%mkvmerge%White%_%Lightgray%script %Red%%ver%%White%  [mkv+ass / %Yellow%%drama%%White% + %Yellow%%season%%White%]%spaces%
 echo                    %Cyan%@rjmolina13 - ronanj.site/gh%White%
@@ -480,8 +573,12 @@ goto :EOF
 :: =====================================
 :: Function to download and extract
 :download_and_extract
+cls && echo. && echo. && echo. && echo. && echo. && echo. && echo. && echo. && echo.
+echo   ^>   %Red%Error^! %White%File %Yellow%"%exe%" %White%not found!
+echo       %Bold%Will automatically download and extract %Yellow%"%exe%"%White%...
 echo       %Bold%Now downloading %Yellow%"%filename%"%White%...
-powershell -Command "(New-Object System.Net.WebClient).DownloadFile('%url%', '%filename%')"
+@REM powershell -Command "(New-Object System.Net.WebClient).DownloadFile('%url%', '%filename%')"
+powershell -Command "Invoke-WebRequest -Uri '%url%' -OutFile '%filename%'"
 if %errorlevel% neq 0 (
     echo Failed to download "%filename%"
     goto :EOF
@@ -491,30 +588,82 @@ if %errorlevel% neq 0 (
 del "%filename%" >nul
 goto :EOF
 
+
 :: Function to download 7zip if it isn't installed
 :szdl
-if not exist %sz% (
-    echo 7-Zip not found. Downloading and installing...
+setlocal enabledelayedexpansion
+cls
+if not exist !sz! (
+    echo   ^>   %Red%Error^^! %White%File %Yellow%7-Zip %White%is not installed^^!
+    echo       %Bold%Downloading and installing... %White%
 
-    REM Define download URL
-    set "download_url=https://www.7-zip.org/a/7z2403-x64.exe"
-
-    REM Define download location
+    ::Define download URL and download location
+    set download_url=https://www.7-zip.org/a/7z2403-x64.exe
     set "download_location=%TEMP%\7zInstaller.exe"
 
-    REM Download 7-Zip installer using PowerShell
-    powershell -Command "(New-Object System.Net.WebClient).DownloadFile('%download_url%', '%download_location%')"
-
-    REM Install 7-Zip silently
-    start /wait "" "%download_location%" /S
-
-    REM Check if installation was successful
-    if not exist %sz% (
-        echo Failed to install 7-Zip.
-        exit /b 1
+    :: Download 7-Zip installer using PowerShell
+    echo.
+    powershell -Command "Invoke-WebRequest -Uri '!download_url!' -OutFile '!download_location!' -Verbose"
+    :: Install 7-Zip silently
+    echo.
+    echo   ^>   %Bold%Click %Green%"Yes"%White% when prompted with UAC.%White%
+    start /wait "" "!download_location!" /S
+    if errorlevel 1 (
+      cls
+      del "!download_location!" >nul
+      echo   ^>   %Red%Error^^! %White%Failed to install %Yellow%"7-Zip"%White%.
+      echo       %Bold%Please press any key to exit...%White%
+      pause >nul && exit
     )
-
-    REM Clean up downloaded installer
-    del "%download_location%"
+    
+    :: Check if installation was successful
+    if not exist !sz! (
+      cls
+      echo   ^>   %Red%Error^^! %White%Failed to install %Yellow%"7-Zip"%White%.
+      del "!download_location!" >nul
+      timeout 5 >nul && exit
+    ) else (
+      cls
+      del "!download_location!" >nul
+      echo   ^>   %Yellow%"7-Zip" %Green%installed successfully^!%White%
+      echo       %Bold%Please press any key to continue...%White%
+      pause >nul
+      if not defined _relaunched (set _relaunched=1 & start "" cmd /c "%~dpnx0" %* & exit)
+    )
 )
 goto :EOF
+
+:fontextract
+setlocal EnableDelayedExpansion
+
+if not exist "%~dp0NetflixSans-Medium.otf" (
+    set "base64URL=https://gist.githubusercontent.com/rjmolina13/651ba894bb7495c0292aa8a36e3220ca/raw/f727c365da24a7a2b94d94fcedf011bbc5f6c3d1/font.txt"
+    set "base64File=%~dp0font.txt"
+    set "fontFile=%~dp0NetflixSans-Medium.otf"
+
+    cls && call :header && echo. && echo.
+    echo %White%'    Downloading %Yellow%secret font file%White%... 
+    powershell -command "& {$webClient = New-Object System.Net.WebClient; try {$webClient.DownloadFile('!base64URL!', '!base64File!')} catch { exit 1}}"
+
+    if errorlevel 1 (
+        echo. && echo.
+        echo %White%'    %Red%Download failed%White%, returning to menu...
+        timeout 5 >nul && cls && goto main
+    )
+
+    echo %White%'    Converting Base64 text to font file...
+    certutil -decode "!base64File!" "!fontFile!" >nul 2>&1
+
+    REM Clean up downloaded file
+    del "!base64File!" >nul
+    timeout 5 >nul && cls && goto main
+) else (
+    cls && call :header
+    echo. && echo.
+    echo %White%'    %Green%File %Yellow%"%~dp0NetflixSans-Medium.otf" %Green%exists^^!
+    timeout 5 >nul && cls && goto main
+)
+
+
+
+

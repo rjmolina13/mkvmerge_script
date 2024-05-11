@@ -1,5 +1,6 @@
 .git
+.ignore
+.gitignore
 mkvmerge_script-play.vbs
-mkvmerge_script.bat.*
-dload.bat
+*.otf
 bin
