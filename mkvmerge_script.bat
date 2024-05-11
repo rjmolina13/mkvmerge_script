@@ -17,6 +17,7 @@
 ::+ 6.6-8 - added custom font for attatching via subtitles, custom and current dir font
 ::+ 6.9 - fixed custom font and cd custom font detection
 ::+ 7.0 - added custom subtitle track tag, added secret font dl menu, improved code readability and organization, added script source custom font
+::+ 7.1 - made detection of special episodes toggleable, add toggle to main menu
 
 :: Check play sound .vbs if exists else creates
 if not exist "%~dp0mkvmerge_script-play.vbs" (
@@ -66,6 +67,7 @@ set season=S01
 set lang=kor
 set drama=KDrama
 set type=drama
+set special=n
 set /a count = 0
 title mkvmerge_script %ver%  [mkv+ass / %drama%] - %Season%
 
@@ -127,6 +129,7 @@ cls
 
 :: Main Menu
 :main
+if "%special%"=="n" (set "sp=%Red%N%White%") else if "%special%"=="y" (set "sp=%Green%Y%White%")
 title mkvmerge_script %ver%  [mkv+ass / %drama%] - %Season% %count%
 if "%type%"=="movie" (title mkvmerge_script %ver%  [mkv+ass / %drama%])
 
@@ -152,7 +155,7 @@ echo                                                                            
 echo                                                                                  ║         S:custom    0:default     ║
 set "spaces1=                                                "
 set "timestamp1='    Enter %Yellow%%drama%%White% Folder Path with"
-set "message1=         ║      %Yellow%ssf:%White% script source font      ║"
+set "message1=         ║   %Yellow%ssf:%White% script source font  sp: %sp%  ║"
 set "line1=%timestamp1%%spaces1%"
 set "line1=%line1:~0,80%  %message1%
 echo                                                                                  ║         z: custom Ep   %Red%x: Exit%White%    ║
@@ -192,6 +195,7 @@ if /i "%loc%"=="csr" (goto csr)
 if /i "%loc%"=="sb" (goto csubname)
 if /i "%loc%"=="dl" (goto fontextract)
 if /i "%loc%"=="ssf" (goto ssf)
+if /i "%loc%"=="sp" (if /i "%special%"=="n" (set "special=y") else (set "special=n")) && cls && goto main
 
 cls
 :season
@@ -199,7 +203,7 @@ if "%type%"=="movie" (goto movie)
 if "%type%"=="variety" (goto variety)
 call :header && echo.
 pushd "%loc%"
-if exist "*SP*" md sp && move "*SP*" sp
+if /i "%special%"=="y" (if exist "*SP*" md sp && move "*SP*" sp)
 echo.
 echo %White%'    Current directory is: 
 echo '     %Yellow%"%cd%"%White%
@@ -409,7 +413,7 @@ title mkvmerge_script %ver%   [mkv+ass / %drama%]    l     Muxing...  "%%~nA.mkv
 echo. && echo.
 )
 echo.
-if exist sp (goto spyes) else goto ending
+if /i "%special%"=="y" (if exist sp (goto spyes)) else (goto ending)
 :spyes
 cd sp
 for %%A IN (*.mkv) do (
